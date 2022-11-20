@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">BackToLife</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="capacity">50</string>
+    <string name="date">12/06/2023</string>
+    <string name="title1">Relaxation</string>
+    <string name="title2">Nature</string>
+    <string name="title4">Rania</string>
+    <string name="title5">Sawssen</string>
+    <string name="title3">Hamza</string>
+    <string name="titre">Relaxation</string>
+    <string name="titre1">Nature</string>
+    <string name="angry">Angry</string>
+    <string name="sad">Sad</string>
+    <string name="happy">Happy</string>
+
+    <string name="depressed"> Depression</string>
+    <string name="elevated"> Elevation</string>
+    <string name="irritability"> Irritability</string>
+    <string name="psychotic"> Psychotic</string>
+
+
+
+</resources>
