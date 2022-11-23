@@ -2,21 +2,28 @@ package com.example.backtolife.fragments
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.SeekBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.backtolife.*
 import com.example.backtolife.API.UserApi
+import com.example.backtolife.FULLNAME
+import com.example.backtolife.PREF_NAME
+import com.example.backtolife.R
+import com.example.backtolife.SplashScreen
 import com.example.backtolife.models.ReportResponse
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,9 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
-import kotlin.math.min
 
 
 const val DATE = "DATE"
@@ -42,6 +47,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var textSelectedDate: TextView
     private lateinit var btnAdd: Button
+    private lateinit var btnSignOut: Button
 
     private lateinit var imageHappy: ImageView
     private lateinit var imageCalm: ImageView
@@ -88,6 +94,7 @@ class HomeFragment : Fragment() {
         textViewName.text = textName
 
         btnAdd = view.findViewById(R.id.buttonAdd)
+
         mDatePickerBtn = view.findViewById(R.id.textButtonDate)
         textSelectedDate = view.findViewById(R.id.textViewSelectedDate)
 
@@ -113,24 +120,51 @@ class HomeFragment : Fragment() {
         btnPSNo = view.findViewById(R.id.btnPsychoticSymptomsNo)
         btnPSYes = view.findViewById(R.id.PsychoticSymptomsYes)
 
+        btnSignOut = view.findViewById(R.id.buttonSignOut)
 
+        //Google Sign In
 
-        val calender = Calendar.getInstance()
-
-        fun updateTable(c : Calendar){
-            val mf = "dd-MM-yyyy"
-            val sdf = SimpleDateFormat(mf,Locale.FRANCE)
-            textSelectedDate.setText(sdf.format(c.time))
-
-        }
-        val datepicker = DatePickerDialog.OnDateSetListener{ view , year, month , day ->
-            calender.set(Calendar.YEAR,year)
-            calender.set(Calendar.MONTH,month)
-            calender.set(Calendar.DAY_OF_MONTH,day)
-
-            updateTable(calender)
+        val gso =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+        val gsc = GoogleSignIn.getClient(view.context, gso);
+        val acct = GoogleSignIn.getLastSignedInAccount(view.context)
+        if (acct != null) {
+            val fullName = acct.displayName
+            val email = acct.email
+            textViewName.text = fullName
 
         }
+
+        fun signOut() {
+            gsc.signOut().addOnCompleteListener {
+                activity?.finish()
+                val intent = Intent(activity, SplashScreen::class.java)
+                startActivity(intent)
+            }
+        }
+
+        btnSignOut.setOnClickListener {
+            signOut()
+        }
+
+    val calender = Calendar.getInstance()
+
+    fun updateTable(c: Calendar) {
+        val mf = "dd-MM-yyyy"
+        val sdf = SimpleDateFormat(mf, Locale.FRANCE)
+        textSelectedDate.setText(sdf.format(c.time))
+
+    }
+
+    val datepicker = DatePickerDialog.OnDateSetListener { view, year, month, day ->
+        calender.set(Calendar.YEAR, year)
+        calender.set(Calendar.MONTH, month)
+        calender.set(Calendar.DAY_OF_MONTH, day)
+
+        updateTable(calender)
+
+    }
+
 
 
 

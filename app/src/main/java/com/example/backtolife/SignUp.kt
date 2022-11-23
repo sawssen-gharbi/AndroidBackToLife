@@ -47,6 +47,7 @@ class SignUp : AppCompatActivity() {
         setContentView(R.layout.activity_signup)
             val log=findViewById<Button>(R.id.textButtonLogin)
 
+
             email = findViewById(R.id.textInputLayoutEmail)
             fullname = findViewById(R.id.textInputLayoutFullName)
             role = findViewById(R.id.checkBoxDoctor)
@@ -90,6 +91,7 @@ class SignUp : AppCompatActivity() {
 
             val apiInterface = UserApi.create()
             val map: HashMap<String, String> = HashMap()
+
 
             map["fullName"] = fullname.editText?.text.toString()
             map["email"] = email.editText?.text.toString()

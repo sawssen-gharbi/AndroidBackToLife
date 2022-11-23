@@ -16,54 +16,70 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.backtolife.API.UserApi
 import com.example.backtolife.Adapter.MyReportAdapter
 import com.example.backtolife.FULLNAME
+import com.example.backtolife.ID
+import com.example.backtolife.PREF_NAME
 
 import com.example.backtolife.R
+import com.example.backtolife.models.Report
 import com.example.backtolife.models.Reports
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class ReportFragment : Fragment() {
+private lateinit var mSharedPref: SharedPreferences
+val apiInterface = UserApi.create()
 
-    private lateinit var adapter : MyReportAdapter
+class ReportFragment : Fragment(R.layout.fragment_report) {
+
     private lateinit var recyclerView: RecyclerView
-    private lateinit var reportArrayList : ArrayList<Reports>
-
-
-    lateinit var imageId : Array<Int>
-    lateinit var mood : Array<String>
-    lateinit var date : Array<String>
-    lateinit var depressedPourcentage: Array<String>
-    lateinit var elevatedPourcentage: Array<String>
-    lateinit var irritabilityPourcentage: Array<String>
-    lateinit var psychoticSymptoms: Array<String>
-    lateinit var reports : Array<String>
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val rootview = inflater.inflate(R.layout.fragment_report, container, false)
+
+        mSharedPref = requireContext().getSharedPreferences(PREF_NAME, AppCompatActivity.MODE_PRIVATE);
+
+
+        apiInterface.getReport(mSharedPref.getString(ID, "").toString()).enqueue(object : Callback<List<Report>> {
+                override fun onResponse(
+                    call: Call<List<Report>>, response:
+                    Response<List<Report>>
+                ) {
+
+                    if (response.isSuccessful) {
+                        recyclerView = rootview.findViewById(R.id.recycleViewReport)
+                        val adapter = MyReportAdapter(response.body()!! as MutableList<Report>)
+
+                        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,
+                            false)
+                        recyclerView.adapter = adapter
+
+                    }
+                }
+
+
+
+
+            override fun onFailure(call: Call<List<Report>>, t: Throwable) {
+                Log.e("gg","g")
+            }
+        })
+
+
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_report, container, false)
+        return rootview
 
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (super.onViewCreated(view, savedInstanceState))
-        dataInitial()
-        val layoutManager = LinearLayoutManager(context)
-
-        recyclerView = view.findViewById(R.id.recycleViewReport)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.setHasFixedSize(true)
-        adapter = MyReportAdapter(reportArrayList)
-        recyclerView.adapter = adapter
+}
 
 
 
-    }
-
-
-    private fun dataInitial(){
+   /* private fun dataInitial(){
         reportArrayList = arrayListOf<Reports>()
         imageId = arrayOf(
             R.drawable.angryy,
@@ -104,11 +120,10 @@ class ReportFragment : Fragment() {
                 elevatedPourcentage[i],irritabilityPourcentage[i],psychoticSymptoms[i])
 
             reportArrayList.add(reports)
-        }
+        }*/
 
 
 
-    }
 
 
-}
+

@@ -336,6 +336,16 @@
                     app:layout_constraintStart_toEndOf="@+id/btnsPsychoticSymptoms"
                     app:layout_constraintTop_toTopOf="@+id/btnsPsychoticSymptoms" />
 
+                <Button
+                    android:id="@+id/buttonSignOut"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign Out"
+                    app:layout_constraintBottom_toBottomOf="@+id/radioGroupNameWelc"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/radioGroupNameWelc" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </FrameLayout>

@@ -1,17 +1,26 @@
 package com.example.backtolife
 
+import android.R.attr.data
+import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.backtolife.API.UserApi
-import com.example.backtolife.fragments.HomeFragment
 import com.example.backtolife.models.LoginResponse
-import com.example.backtolife.models.User
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,37 +32,136 @@ import retrofit2.Response
 
 class Login: AppCompatActivity() {
 
+
+
+    val apiInterface = UserApi.create()
+    val map: HashMap<String, String> = HashMap()
+
+
+
+    lateinit var imageGoogle : ImageView
     lateinit var email : TextInputLayout
     lateinit var password : TextInputLayout
     private lateinit var mSharedPref: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         mSharedPref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         email = findViewById(R.id.textInputLayoutEmail)
         password = findViewById(R.id.textInputLayoutPassword)
+        imageGoogle = findViewById(R.id.imageViewGoogle)
+
+
+
+
         val button = findViewById<Button>(R.id.buttonLogin)
-        val but=findViewById<Button>(R.id.textButtonLogin)
+        val but = findViewById<Button>(R.id.textButtonLogin)
 
-        button.setOnClickListener{
+        button.setOnClickListener {
             doLogin()
-
-
         }
-        but.setOnClickListener{
+
+        but.setOnClickListener {
             val intent = Intent(this@Login, SignUp::class.java)
             startActivity(intent)
         }
 
 
+        //Google Sign In
 
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        val gsc = GoogleSignIn.getClient(this, gso);
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+
+         fun signIn() {
+            val signInIntent: Intent = gsc.signInIntent
+            startForResult.launch(signInIntent)
+        }
+
+        imageGoogle.setOnClickListener{
+                signIn()
+
+        }
 
     }
 
+
+
+
+    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val intent = result.data
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
+            handleSignInResult(task)
+
+        }
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+             val account = completedTask.getResult(ApiException::class.java)
+            val acc = account.email
+            map["email"] = acc.toString()
+            map["fullName"] = account.displayName.toString()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                apiInterface.loginGoogle(map).enqueue(object : Callback<LoginGoogleResponse> {
+                    override fun onResponse(
+                        call: Call<LoginGoogleResponse>, response:
+                        Response<LoginGoogleResponse>
+                    ) {
+                        val userGoogle = response.body()
+                        // Log.e("success: ", userInfo.toString())
+                        if (userGoogle != null) {
+                            mSharedPref.edit().apply {
+                                putString(EMAIL, account.email)
+                                putString(FULLNAME, account.displayName)
+                            }.apply()
+
+                                val intent = Intent(this@Login, MainActivityPatient::class.java)
+                                startActivity(intent)
+                                finish()
+
+
+
+                        } else {
+
+                            Toast.makeText(
+                                this@Login,
+                                "Mot de passe incorrect !!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                    }
+
+                    override fun onFailure(call: Call<LoginGoogleResponse>, t: Throwable) {
+                        Log.e("ggg","gggg")
+                    }
+
+                })
+
+
+
+            }
+
+        } catch (e: ApiException) {
+            Log.d("Message",e.toString())
+        }
+    }
+
+
+
+
     private fun doLogin() {
         if (isValide()){
-            val apiInterface = UserApi.create()
-            val map: HashMap<String, String> = HashMap()
+
 
             map["email"] = email.editText?.text.toString()
             map["password"] = password.editText?.text.toString()
@@ -112,12 +220,12 @@ class Login: AppCompatActivity() {
 
     private fun isValide(): Boolean {
         if ((email.editText?.text.toString()).isEmpty()){
-            email.error = "getString(R.string.mustNotBeEmpty)"
+            email.error = "xx"
             return false
         }
 
         if ((password.editText?.text.toString()).isEmpty()){
-            password.error = "getString(R.string.mustNotBeEmpty)"
+            password.error = "xx"
             return false
         }
 
