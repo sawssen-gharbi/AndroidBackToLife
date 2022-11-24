@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/itemHome"
+        android:title="Home"
+        android:icon="@drawable/ic_baseline_home_24" />
+
+    <item android:id="@+id/itemReport"
+        android:title="Report"
+        android:icon="@drawable/ic_baseline_folder_24" />
+
+    <item android:id="@+id/itemList"
+        android:title="List"
+        android:icon="@drawable/ic_baseline_list_24" />
+
+    <item android:id="@+id/itemProfile"
+        android:title="Profile"
+        android:icon="@drawable/ic_person" />
+
+
+</menu>
