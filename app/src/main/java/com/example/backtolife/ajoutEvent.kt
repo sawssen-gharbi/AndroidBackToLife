@@ -13,14 +13,13 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.backtolife.API.UserApi
-import com.example.backtolife.models.LoginResponse
 import com.example.backtolife.models.TherapyResponse
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -30,30 +29,29 @@ import retrofit2.Response
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
-import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
 
 import android.widget.ImageView
-import androidx.core.content.FileProvider
-import androidx.core.net.toFile
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.internal.format
+import com.example.studentchat.Interface.RealPathUtil
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
+const val IDTHERAPY = "IDTHERAPY"
 const val TITRE = "TITRE"
 const val DATE = "DATE"
 const val CAPACITY = "CAPACITY"
+
+const val IMAGE = "IMAGE"
 const val PICK_IMAGE_CODE = 100
 const val PERMS_REQUEST_CODE = 101
 const val IS_GRANTED_READ_IMAGES = "IS_GRANTED_READ_IMAGES"
 const val PREFS_NAME = "APP_PREFS"
 
-@Suppress("DEPRECATION")
+@Suppress("OverridingDeprecatedMember", "DEPRECATION")
 class ajoutEvent : Fragment() {
     lateinit var mDatePickerBtn : Button
     lateinit var titre : TextInputLayout
@@ -62,6 +60,7 @@ class ajoutEvent : Fragment() {
     private  var imageU :Uri?=null
     private lateinit var image: ImageView
     var multipartImage: MultipartBody.Part? = null
+    lateinit var path:String
 
 
 
@@ -71,6 +70,11 @@ class ajoutEvent : Fragment() {
             resultCode, /* data = */
             data)
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_CODE) {
+            val rl=RealPathUtil()
+            val p: String? = data?.data?.let { this.context?.let { it1 -> rl.getRealPath(it1, it) } }
+            if(!p.isNullOrEmpty()){
+                path=p;
+            }
             image.setImageURI(data?.data)
         imageU= Uri.parse(data?.dataString!!)
         }
@@ -161,27 +165,23 @@ class ajoutEvent : Fragment() {
     private fun doAjout() {
         if (isValide()){
             val apiInterface = UserApi.create()
-            val file = FileProvider().openFile(imageU!!,"r").let {
-                it;
-            }
-            Log.i("FILE-INFO", file.toString())
-            val requestFile: RequestBody = RequestBody.create(
-                "multipart/form-data".toMediaType(),
-                file
-            )
-           multipartImage =
-                MultipartBody.Part.createFormData("image", file, requestFile);
 
-            Log.e("image", file.toString())
 
+            Log.e("path",path)
+            val f=File(path)
+            val reqFile:RequestBody= f.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val body: MultipartBody.Part=MultipartBody.Part.createFormData("image",f.name,reqFile)
+           // val reqFile = f.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            //val body: MultipartBody.Part=MultipartBody.Part.createFormData("image",f.name,reqFile)
 
             val map: HashMap<String, RequestBody> = HashMap()
             map["date"] =  mDatePickerBtn.text.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
             map["titre"] = titre.editText?.text.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
             map["capacity"] = capacity.editText?.text.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
+            //map["image"]= body
 
             CoroutineScope(Dispatchers.IO).launch {
-                apiInterface.addOnce(map, multipartImage!!, mSharedPref.getString(ID, "")!!).enqueue(object : Callback<TherapyResponse> {
+                apiInterface.addOnce(map, body, mSharedPref.getString(ID, "")!!).enqueue(object : Callback<TherapyResponse> {
 // ija discord hhh
                     override fun onResponse(call: Call<TherapyResponse>, response:
                     Response<TherapyResponse>
@@ -190,9 +190,10 @@ class ajoutEvent : Fragment() {
                         Log.e("success: ", therapy.toString())
                         if (therapy != null) {
                             mSharedPref.edit().apply {
-                                putString(ID, therapy.therapy._id)
+                                putString(IDTHERAPY, therapy.therapy._id)
                                 putString(TITRE, therapy.therapy.titre)
                                 putString(DATE, therapy.therapy.date)
+                                putString(IMAGE,therapy.therapy.image)
                                 putInt(CAPACITY, therapy.therapy.capacity)
 
 

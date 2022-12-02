@@ -2,6 +2,7 @@ package com.example.backtolife
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.backtolife.API.UserApi
@@ -30,12 +32,19 @@ val apiInterface = UserApi.create()
 
 class EventDoctor : Fragment() {
     private lateinit var recyclerView: RecyclerView
-
+   // private lateinit var constraintLayout: ConstraintLayout
+   // private lateinit var animationDrawable:AnimationDrawable
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val rootview = inflater.inflate(R.layout.fragment_event_doctor, container, false)
+      /*  constraintLayout = rootview.findViewById(R.id.layout);
+        animationDrawable = constraintLayout.getBackground() as AnimationDrawable;
+        animationDrawable.setEnterFadeDuration(4000);
+        animationDrawable.setExitFadeDuration(2000);
+        animationDrawable.start();*/
+
 
         mSharedPref = requireContext().getSharedPreferences(PREF_NAME, AppCompatActivity.MODE_PRIVATE);
 

@@ -16,7 +16,7 @@ data class event(val nomm:String, val time:String, val doctorName:String, val im
         parcel.writeString(nomm)
         parcel.writeString(time)
         parcel.writeString(doctorName)
-        parcel.writeInt(imagee)
+        parcel.writeInt(imagee )
     }
     override fun describeContents(): Int {
         return 0

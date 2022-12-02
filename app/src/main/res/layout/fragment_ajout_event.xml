@@ -138,10 +138,11 @@
 
                         <ImageView
                             android:id="@+id/imageView3"
-                            android:layout_width="150dp"
-                            android:layout_height="200dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="70dp"
                             android:layout_weight="1"
+                            android:visibility="visible"
                             tools:src="@drawable/ic_baseline_linked_camera_24" />
 
 
