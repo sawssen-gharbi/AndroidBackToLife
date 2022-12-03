@@ -31,7 +31,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="609dp">
 
 
                 <LinearLayout
@@ -225,6 +225,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.344"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewDepressedMood" />
 
@@ -250,6 +251,7 @@
                     android:valueFrom="0"
                     android:valueTo="100"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.344"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewElevatedMood" />
 
@@ -274,6 +276,7 @@
                     android:valueFrom="0"
                     android:valueTo="100"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.344"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewIrritabilityMood" />
 
@@ -323,18 +326,20 @@
 
                 </RadioGroup>
 
+
                 <Button
                     android:id="@+id/buttonAdd"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="46dp"
-                    android:layout_height="49dp"
+                    android:layout_width="49dp"
+                    android:layout_height="47dp"
+                    android:layout_marginEnd="4dp"
                     android:text="+"
-                    android:textSize="25dp"
+                    android:textSize="20dp"
                     android:textColor="@color/orange"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.783"
-                    app:layout_constraintStart_toEndOf="@+id/btnsPsychoticSymptoms"
-                    app:layout_constraintTop_toTopOf="@+id/btnsPsychoticSymptoms" />
+                    app:layout_constraintTop_toTopOf="@+id/btnsPsychoticSymptoms"
+                    app:srcCompat="@drawable/ic_baseline_plus_one_24"
+                    app:tint="@color/white" />
 
                 <Button
                     android:id="@+id/buttonSignOut"
@@ -345,6 +350,36 @@
                     app:layout_constraintBottom_toBottomOf="@+id/radioGroupNameWelc"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/radioGroupNameWelc" />
+
+                <TextView
+                    android:id="@+id/textViewPourDep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/sliderDepressed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="0"
+                    app:layout_constraintStart_toEndOf="@+id/sliderDepressed"
+                    app:layout_constraintTop_toTopOf="@+id/sliderDepressed" />
+
+                <TextView
+                    android:id="@+id/textViewPourEl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/sliderElevated"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="0"
+                    app:layout_constraintStart_toEndOf="@+id/sliderElevated"
+                    app:layout_constraintTop_toTopOf="@+id/sliderElevated" />
+
+                <TextView
+                    android:id="@+id/textViewPourIrr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/sliderIrritability"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="0"
+                    app:layout_constraintStart_toEndOf="@+id/sliderIrritability"
+                    app:layout_constraintTop_toTopOf="@+id/sliderIrritability" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

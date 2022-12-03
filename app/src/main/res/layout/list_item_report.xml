@@ -34,27 +34,28 @@ app:cardBackgroundColor="@color/light_medium_gray"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toEndOf="@+id/title_image_report" />
 
+
     <TextView
         android:id="@+id/dateReport"
-        android:drawableLeft="@drawable/ic_baseline_calendar_today_24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
         android:layout_marginTop="5dp"
+        android:drawableLeft="@drawable/ic_baseline_calendar_today_24"
         android:text="The Date :"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toEndOf="@+id/title_image_report" />
 
 
+
     <RadioGroup
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="126dp"
         android:layout_marginStart="110dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="38dp"
         android:background="@drawable/background_border"
-        android:paddingTop="10dp"
+        android:padding="5dp"
         android:paddingBottom="10dp">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,7 +113,7 @@ app:cardBackgroundColor="@color/light_medium_gray"
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:orientation="vertical">
 
                     <SeekBar
@@ -134,11 +135,53 @@ app:cardBackgroundColor="@color/light_medium_gray"
                         android:layout_weight="1" />
 
                     <TextView
+                        android:id="@+id/psychotic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="No"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/depressedText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="%"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <TextView
+                        android:id="@+id/elevationText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="%"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <TextView
+                        android:id="@+id/irritabilityText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="%"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 

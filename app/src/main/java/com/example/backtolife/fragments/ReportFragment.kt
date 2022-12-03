@@ -1,6 +1,5 @@
 package com.example.backtolife.fragments
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -8,20 +7,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.bundleOf
+import androidx.recyclerview.widget.ItemTouchHelper
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.backtolife.*
 import com.example.backtolife.API.UserApi
 import com.example.backtolife.Adapter.MyReportAdapter
-import com.example.backtolife.FULLNAME
-import com.example.backtolife.ID
-import com.example.backtolife.PREF_NAME
 
-import com.example.backtolife.R
 import com.example.backtolife.models.Report
-import com.example.backtolife.models.Reports
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,19 +30,25 @@ val apiInterface = UserApi.create()
 class ReportFragment : Fragment(R.layout.fragment_report) {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: MyReportAdapter
+
 
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         val rootview = inflater.inflate(R.layout.fragment_report, container, false)
 
-        mSharedPref = requireContext().getSharedPreferences(PREF_NAME, AppCompatActivity.MODE_PRIVATE);
+        mSharedPref =
+            requireContext().getSharedPreferences(PREF_NAME, AppCompatActivity.MODE_PRIVATE);
 
 
-        apiInterface.getReport(mSharedPref.getString(ID, "").toString()).enqueue(object : Callback<List<Report>> {
+        apiInterface.getReport(mSharedPref.getString(ID, "").toString())
+            .enqueue(object : Callback<List<Report>> {
                 override fun onResponse(
                     call: Call<List<Report>>, response:
                     Response<List<Report>>
@@ -52,30 +56,64 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
 
                     if (response.isSuccessful) {
                         recyclerView = rootview.findViewById(R.id.recycleViewReport)
-                        val adapter = MyReportAdapter(response.body()!! as MutableList<Report>)
+                        adapter = MyReportAdapter(response.body()!! as MutableList<Report>)
 
-                        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,
-                            false)
+                        recyclerView.layoutManager = LinearLayoutManager(
+                            context, LinearLayoutManager.VERTICAL,
+                            false
+                        )
                         recyclerView.adapter = adapter
+                        val swipeDelete = object : SwipeToDeleteCallBack(requireContext()) {
+                            override fun onSwiped(
+                                viewHolder: RecyclerView.ViewHolder,
+                                direction: Int
+                            ) {
+                                val builder = AlertDialog.Builder(requireContext())
+                                builder.setTitle("Delete Item")
+                                builder.setMessage("Are you sure you want to delete item")
+                                builder.setPositiveButton("Confirm") { dialog, which ->
+                                    apiInterface.deleteReport(mSharedPref.getString(IDREPORT, "").toString())
+                                        .enqueue(object: Callback<Report> {
+                                            override fun onResponse(call: Call<Report>, response: Response<Report>)
+                                            {
+                                                if (response.isSuccessful){
+                                                    Log.i("Report Deleted", response.body().toString())
+                                                }
+                                            }
 
+                                            override fun onFailure(call: Call<Report>, t: Throwable)
+                                            {
+                                                println("okay")
+                                            }
+                                        })
+                                }
+
+                                builder.setNegativeButton("Cancel") { dialog, which ->
+                                    val position = viewHolder.adapterPosition
+                                    adapter.notifyItemChanged(position)
+                                }
+                                builder.show()
+                            }
+
+                        }
+
+
+                        val touchHelper = ItemTouchHelper(swipeDelete)
+                        touchHelper.attachToRecyclerView(recyclerView)
                     }
+
                 }
 
-
-
-
-            override fun onFailure(call: Call<List<Report>>, t: Throwable) {
-                Log.e("gg","g")
-            }
-        })
-
-
-        // Inflate the layout for this fragment
+                override fun onFailure(call: Call<List<Report>>, t: Throwable) {
+                    Log.e("Fail Delete", ":(")
+                }
+            })
 
         return rootview
 
     }
 }
+
 
 
 

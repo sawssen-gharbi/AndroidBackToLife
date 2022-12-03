@@ -14,12 +14,11 @@
     <string name="angry">Angry</string>
     <string name="sad">Sad</string>
     <string name="happy">Happy</string>
-
     <string name="depressed"> Depression</string>
     <string name="elevated"> Elevation</string>
     <string name="irritability"> Irritability</string>
     <string name="psychotic"> Psychotic</string>
-
+    <string name="infos"> If you are logging in as a Patient  just click next \n If you are a doctor , check the box </string>
 
 
 </resources>

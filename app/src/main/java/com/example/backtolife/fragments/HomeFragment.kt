@@ -9,21 +9,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.backtolife.*
 import com.example.backtolife.API.UserApi
-import com.example.backtolife.FULLNAME
-import com.example.backtolife.PREF_NAME
-import com.example.backtolife.R
-import com.example.backtolife.SplashScreen
 import com.example.backtolife.models.ReportResponse
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,8 +33,11 @@ const val DEPRESSEDMOOD = "DEPRESSEDMOOD"
 const val ELEVATEDMOOD = "ELEVATEDMOOD"
 const val IRRITABILITYMOOD = "IRRITABILITYMOOD"
 const val SYMPTOMS = "SYMPTOMS"
-class HomeFragment : Fragment() {
-    val apiInterface = UserApi.create()
+const val IDREPORT = "IDREPORT"
+
+class HomeFragment : Fragment() , View.OnClickListener  {
+
+
     private lateinit var mSharedPref: SharedPreferences
     private lateinit var mDatePickerBtn: Button
 
@@ -61,6 +57,9 @@ class HomeFragment : Fragment() {
     private lateinit var textManic: TextView
     private lateinit var textAngry: TextView
     private lateinit var textSad: TextView
+    private lateinit var textPourDep : TextView
+    private lateinit var textPourEl : TextView
+    private lateinit var textPourIrr : TextView
 
     private lateinit var sDepressed: SeekBar
     private lateinit var sElevated: SeekBar
@@ -72,8 +71,16 @@ class HomeFragment : Fragment() {
 
     lateinit var textViewName: TextView
 
+    var startPoint = 0
+    var endPoint = 0
+
+    val map: HashMap<String, String> = HashMap()
+
+
 
     override fun onCreateView(
+
+
 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,12 +88,18 @@ class HomeFragment : Fragment() {
 
         // Inflate the layout for this fragment
         refresh(context)
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return   inflater.inflate(R.layout.fragment_home, container, false)
+
+
 
     }
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+            val apiInterface = UserApi.create()
+
+
         mSharedPref =
             requireContext().getSharedPreferences(PREF_NAME, AppCompatActivity.MODE_PRIVATE);
         val textName = mSharedPref.getString(FULLNAME, "").toString()
@@ -116,6 +129,10 @@ class HomeFragment : Fragment() {
         sDepressed = view.findViewById(R.id.sliderDepressed)
         sElevated = view.findViewById(R.id.sliderElevated)
         sIrritability = view.findViewById(R.id.sliderIrritability)
+
+        textPourDep = view.findViewById(R.id.textViewPourDep)
+        textPourEl = view.findViewById(R.id.textViewPourEl)
+        textPourIrr = view.findViewById(R.id.textViewPourIrr)
 
         btnPSNo = view.findViewById(R.id.btnPsychoticSymptomsNo)
         btnPSYes = view.findViewById(R.id.PsychoticSymptomsYes)
@@ -147,6 +164,7 @@ class HomeFragment : Fragment() {
             signOut()
         }
 
+            //Date Picker
     val calender = Calendar.getInstance()
 
     fun updateTable(c: Calendar) {
@@ -164,102 +182,210 @@ class HomeFragment : Fragment() {
         updateTable(calender)
 
     }
-
-
-
-
-        mDatePickerBtn.setOnClickListener {
+            mDatePickerBtn.setOnClickListener {
            DatePickerDialog(view.context,datepicker,calender.get(Calendar.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH)).show()
 
         }
 
 
-        val apiInterface = UserApi.create()
-        val map: HashMap<String, String> = HashMap()
+            //OnClick Method
+            imageHappy.setOnClickListener(this)
+            imageCalm.setOnClickListener(this)
+            imageManic.setOnClickListener(this)
+            imageAngry.setOnClickListener(this)
+            imageSad.setOnClickListener(this)
+            btnPSYes.setOnClickListener(this)
+            btnPSNo.setOnClickListener(this)
 
 
-        imageHappy.setOnClickListener {
 
-            map["mood"] = textHappy.text.toString()
 
-        }
+        sDepressed.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+               override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                   textPourDep.text = p1.toString()
+               }
 
-        imageCalm.setOnClickListener {
-            map["mood"] = textCalm.text.toString()
+               override fun onStartTrackingTouch(p0: SeekBar?) {
+                   if (p0 != null) {
+                       startPoint = p0.progress
+                   }
+               }
 
-        }
+               override fun onStopTrackingTouch(p0: SeekBar?) {
+                   if (p0 != null) {
+                       endPoint = p0.progress
+                   }
 
-        imageManic.setOnClickListener {
-            map["mood"] = textManic.text.toString()
-        }
+               }
 
-            imageAngry.setOnClickListener {
-                map["mood"] = textAngry.text.toString()
-            }
 
-            imageSad.setOnClickListener {
-                map["mood"] = textSad.text.toString()
+           })
 
-            }
+           sElevated.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+               override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                   textPourEl.text = p1.toString()
+               }
 
-        btnPSYes.setOnClickListener{
-            map["symptoms"] = btnPSYes.text.toString()
-        }
-        btnPSNo.setOnClickListener{
-            map["symptoms"] = btnPSNo.text.toString()
-        }
+               override fun onStartTrackingTouch(p0: SeekBar?) {
+                   if (p0 != null) {
+                       startPoint = p0.progress
+                   }
+               }
 
+               override fun onStopTrackingTouch(p0: SeekBar?) {
+                   if (p0 != null) {
+                       endPoint = p0.progress
+                   }
+
+               }
+
+
+           })
+
+           sIrritability.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+               override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                   textPourIrr.text = p1.toString()
+               }
+
+               override fun onStartTrackingTouch(p0: SeekBar?) {
+                   if (p0 != null) {
+                       startPoint = p0.progress
+                   }
+               }
+
+               override fun onStopTrackingTouch(p0: SeekBar?) {
+                   if (p0 != null) {
+                       endPoint = p0.progress
+                   }
+
+               }
+
+
+           })
 
 
             btnAdd.setOnClickListener {
 
 
-
+                map["user"] = mSharedPref.getString(ID, "")!!
                 map["date"] = textSelectedDate.text.toString()
                 map["depressedMood"] = sDepressed.progress.toString()
                 map["elevatedMood"] = sElevated.progress.toString()
                 map["irritabilityMood"] = sIrritability.progress.toString()
 
+
                 CoroutineScope(Dispatchers.IO).launch {
-                    apiInterface.addReport(map).enqueue(object : Callback<ReportResponse> {
+                    apiInterface.addReport(map,map["user"].toString()).enqueue(object : Callback<ReportResponse> {
                         override fun onResponse(
                             call: Call<ReportResponse>, response:
                             Response<ReportResponse>
                         ) {
-
                             val report = response.body()
-                            Log.e("success: ", report.toString())
-                            if (report != null) {
-                                mSharedPref.edit().apply {
-                                    putString(DATE, report.report.date)
-                                    putString(MOOD, report.report.mood)
-                                    putString(DEPRESSEDMOOD, report.report.depressedMood.toString())
-                                    putString(ELEVATEDMOOD, report.report.elevatedMood.toString())
-                                    putString(
-                                        IRRITABILITYMOOD,
-                                        report.report.irritabilityMood.toString()
-                                    )
+                                            Log.e("iduser",map["user"].toString())
+                                            Log.e("success: ", report.toString())
+                                            if (report != null) {
+                                                mSharedPref.edit().apply {
+                                                    putString(IDREPORT,report.report._id)
+                                                    putString(DATE, report.report.date)
+                                                    putString(MOOD, report.report.mood)
+                                                    putString(DEPRESSEDMOOD, report.report.depressedMood.toString())
+                                                    putString(ELEVATEDMOOD, report.report.elevatedMood.toString())
+                                                    putString(
+                                                        IRRITABILITYMOOD,
+                                                        report.report.irritabilityMood.toString()
+                                                    )
 
-                                }.apply()
-
-
-                            }
-                        }
+                                                }.apply()
 
 
-                        override fun onFailure(call: Call<ReportResponse>, t: Throwable) {
-                            println("messin")
-                        }
-                    })
+                                            }
+                                        }
+
+
+                                        override fun onFailure(call: Call<ReportResponse>, t: Throwable) {
+                                            println("messin")
+                                        }
+                                    })
+                    }
                 }
-            }
+
 
 
 
 
             super.onViewCreated(view, savedInstanceState)
         }
+
+    override fun onClick(p0: View?) {
+
+        if (p0 != null) {
+            when(p0.id){
+
+                 R.id.imageViewHappy  ->  {
+
+                   map["mood"] = textHappy.text.toString()
+                     Toast.makeText(context,"Your choice is " + map["mood"],Toast.LENGTH_SHORT).show()
+                    imageHappy.setImageResource(R.drawable.happy_outline)
+                     imageCalm.setImageResource(R.drawable.yin_yang_symbol)
+                     imageManic.setImageResource(R.drawable.celtic)
+                     imageAngry.setImageResource(R.drawable.angryy)
+                     imageSad.setImageResource(R.drawable.sadd)
+
+                 }
+                R.id.imageViewCalm ->  {
+
+                    map["mood"] = textCalm.text.toString()
+                    Toast.makeText(context,"Your choice is " + map["mood"],Toast.LENGTH_SHORT).show()
+                    imageHappy.setImageResource(R.drawable.happyy)
+                    imageCalm.setImageResource(R.drawable.calm_outline)
+                    imageManic.setImageResource(R.drawable.celtic)
+                    imageAngry.setImageResource(R.drawable.angryy)
+                    imageSad.setImageResource(R.drawable.sadd)
+                }
+                R.id.imageViewManic ->  {
+
+                    map["mood"] = textManic.text.toString()
+                    Toast.makeText(context,"Your choice is " + map["mood"],Toast.LENGTH_SHORT).show()
+                    imageHappy.setImageResource(R.drawable.happyy)
+                    imageCalm.setImageResource(R.drawable.yin_yang_symbol)
+                    imageManic.setImageResource(R.drawable.cetlic_outline)
+                    imageAngry.setImageResource(R.drawable.angryy)
+                    imageSad.setImageResource(R.drawable.sadd)
+                }
+                R.id.imageViewAngry ->  {
+
+                    map["mood"] = textAngry.text.toString()
+                    Toast.makeText(context,"Your choice is " + map["mood"],Toast.LENGTH_SHORT).show()
+                    imageHappy.setImageResource(R.drawable.happyy)
+                    imageCalm.setImageResource(R.drawable.yin_yang_symbol)
+                    imageManic.setImageResource(R.drawable.celtic)
+                    imageAngry.setImageResource(R.drawable.angry_outline)
+                    imageSad.setImageResource(R.drawable.sadd)
+                }
+                R.id.imageViewSad ->  {
+
+                    map["mood"] = textSad.text.toString()
+                    Toast.makeText(context,"Your choice is " + map["mood"],Toast.LENGTH_SHORT).show()
+                    imageHappy.setImageResource(R.drawable.happyy)
+                    imageCalm.setImageResource(R.drawable.yin_yang_symbol)
+                    imageManic.setImageResource(R.drawable.celtic)
+                    imageAngry.setImageResource(R.drawable.angryy)
+                    imageSad.setImageResource(R.drawable.sad_outline)
+                }
+                R.id.PsychoticSymptomsYes -> {
+                    map["symptoms"] = btnPSYes.text.toString()
+                    Toast.makeText(context,"Your choice is " + map["symptoms"],Toast.LENGTH_SHORT).show()
+                }
+                R.id.btnPsychoticSymptomsNo -> {
+                    map["symptoms"] = btnPSNo.text.toString()
+                    Toast.makeText(context,"Your choice is " + map["symptoms"],Toast.LENGTH_SHORT).show()
+                }
+
+
+            }
+        }
     }
+}
 
 
     fun refresh(context: Context?) {

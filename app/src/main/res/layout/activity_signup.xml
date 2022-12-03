@@ -13,7 +13,7 @@
 
 
         <FrameLayout
-            android:id="@+id/frameLayout"
+            android:id="@+id/frameLayoutGoogle"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:background="@drawable/top"
@@ -57,7 +57,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayoutGoogle"
             app:startIconDrawable="@drawable/ic_person">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -141,7 +141,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="90dp"
 
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="100dp"
             android:backgroundTint="@color/blue"
             android:text="Sign Up"
@@ -187,10 +187,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="73dp"
             android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxDoctor"
-            android:visibility="gone">
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxDoctor"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/textViewCeriticat"
@@ -209,6 +214,19 @@
                 android:backgroundTint="@color/blue"
                 android:text="Browse" />
         </RadioGroup>
+
+        <ImageView
+            android:id="@+id/imageViewT"
+            android:layout_width="88dp"
+            android:layout_height="76dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/radioGroupCertificat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.736"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword"
+            app:layout_constraintVertical_bias="0.52"
+            tools:srcCompat="@tools:sample/avatars" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,6 @@
 package com.example.backtolife
 
-import android.R.attr.data
 import android.app.Activity
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -17,7 +15,6 @@ import com.example.backtolife.API.UserApi
 import com.example.backtolife.models.LoginResponse
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
@@ -76,7 +73,17 @@ class Login: AppCompatActivity() {
             .requestEmail()
             .build()
         val gsc = GoogleSignIn.getClient(this, gso);
+
         val account = GoogleSignIn.getLastSignedInAccount(this)
+
+        if(account != null) {
+
+                    val intent = Intent(this@Login, MainActivityGoogle::class.java)
+                    startActivity(intent)
+                }
+
+
+
 
          fun signIn() {
             val signInIntent: Intent = gsc.signInIntent
@@ -105,52 +112,10 @@ class Login: AppCompatActivity() {
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-             val account = completedTask.getResult(ApiException::class.java)
-            val acc = account.email
-            map["email"] = acc.toString()
-            map["fullName"] = account.displayName.toString()
-
-            CoroutineScope(Dispatchers.IO).launch {
-                apiInterface.loginGoogle(map).enqueue(object : Callback<LoginGoogleResponse> {
-                    override fun onResponse(
-                        call: Call<LoginGoogleResponse>, response:
-                        Response<LoginGoogleResponse>
-                    ) {
-                        val userGoogle = response.body()
-                        // Log.e("success: ", userInfo.toString())
-                        if (userGoogle != null) {
-                            mSharedPref.edit().apply {
-                                putString(EMAIL, account.email)
-                                putString(FULLNAME, account.displayName)
-                            }.apply()
-
-                                val intent = Intent(this@Login, MainActivityPatient::class.java)
-                                startActivity(intent)
-                                finish()
-
-
-
-                        } else {
-
-                            Toast.makeText(
-                                this@Login,
-                                "Mot de passe incorrect !!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                    }
-
-                    override fun onFailure(call: Call<LoginGoogleResponse>, t: Throwable) {
-                        Log.e("ggg","gggg")
-                    }
-
-                })
-
-
-
-            }
-
+          completedTask.getResult(ApiException::class.java)
+         finish()
+            val intent = Intent(this@Login, MainActivityGoogle::class.java)
+            startActivity(intent)
         } catch (e: ApiException) {
             Log.d("Message",e.toString())
         }
@@ -181,7 +146,6 @@ class Login: AppCompatActivity() {
                                 putString(PASSWORD,userInfo.userInfo.password)
                                 putString(PHONE,userInfo.userInfo.phone)
                                 putString(SPECIALITY,userInfo.userInfo.speciality)
-                                putString(CERTIFICAT,userInfo.userInfo.certificat)
                             }.apply()
                             if (userInfo.userInfo.role.equals("doctor")) {
                                 val intent = Intent(this@Login, MainDoctor::class.java)
@@ -220,12 +184,12 @@ class Login: AppCompatActivity() {
 
     private fun isValide(): Boolean {
         if ((email.editText?.text.toString()).isEmpty()){
-            email.error = "xx"
+            email.error = "email cannot be empty"
             return false
         }
 
         if ((password.editText?.text.toString()).isEmpty()){
-            password.error = "xx"
+            password.error = "password cannot be empty"
             return false
         }
 

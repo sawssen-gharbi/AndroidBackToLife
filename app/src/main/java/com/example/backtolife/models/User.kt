@@ -10,5 +10,5 @@ data class User(
     val phone: String,
     val role: String,
     val speciality: String,
-    val certificat : String
+    val image : String
 )
