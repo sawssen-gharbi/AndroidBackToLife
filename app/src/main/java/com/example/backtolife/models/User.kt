@@ -9,5 +9,24 @@ data class User(
     val password: String,
     val phone: String,
     val role: String,
-    val speciality: String
+    val speciality: String,
+    val image: String
+)
+data class UserReset (
+    var email: String? = null,
+    var resetCode : String?=null
+
+)
+
+
+
+
+data class UserResetPassword (
+    var email: String? = null,
+    var password: String? = null
+
+)
+data class UserResetResponse (
+    val msgg: String? = null
+
 )

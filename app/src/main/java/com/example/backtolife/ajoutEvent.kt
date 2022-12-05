@@ -34,6 +34,7 @@ import android.net.Uri
 import android.provider.MediaStore
 
 import android.widget.ImageView
+import android.widget.TextView
 import com.example.studentchat.Interface.RealPathUtil
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
@@ -44,6 +45,7 @@ const val IDTHERAPY = "IDTHERAPY"
 const val TITRE = "TITRE"
 const val DATE = "DATE"
 const val CAPACITY = "CAPACITY"
+const val ADRESS = "ADDRESS"
 
 const val IMAGE = "IMAGE"
 const val PICK_IMAGE_CODE = 100
@@ -53,11 +55,13 @@ const val PREFS_NAME = "APP_PREFS"
 
 @Suppress("OverridingDeprecatedMember", "DEPRECATION")
 class ajoutEvent : Fragment() {
-    lateinit var mDatePickerBtn : Button
+   // lateinit var mDatePickerBtn : Button
     lateinit var titre : TextInputLayout
-    lateinit var date : TextInputLayout
+    lateinit var date : Button
     lateinit var capacity : TextInputLayout
+    lateinit var textSelectedDate:TextView
     private  var imageU :Uri?=null
+  lateinit var address:TextInputLayout
     private lateinit var image: ImageView
     var multipartImage: MultipartBody.Part? = null
     lateinit var path:String
@@ -98,16 +102,19 @@ class ajoutEvent : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-       titre=view.findViewById(R.id.textInputLayoutFullName)
-        date=view.findViewById(R.id.mtrl_picker_text_input_date)
-        mDatePickerBtn =view.findViewById<Button>(R.id.textButtonDate)
+       titre=view.findViewById(R.id.textInputLayoutFullNameProfile)
+       // date=view.findViewById(R.id.mtrl_picker_text_input_date)
+        date =view.findViewById<Button>(R.id.textButtonDate)
+        address=view.findViewById(R.id.textInputLayoutUsernameProfile)
+        textSelectedDate=view.findViewById(R.id.textViewSelectedDate)
 
 
         val calender = Calendar.getInstance()
         fun updateTable(c: Calendar) {
             val mf = SimpleDateFormat("dd-MM-yyyy")
             val sdf = mf.format(c.time)
-            mDatePickerBtn.text = sdf
+            textSelectedDate.text = sdf
+
         }
 
         val datepicker = DatePickerDialog.OnDateSetListener { view, year, month, day ->
@@ -122,7 +129,7 @@ class ajoutEvent : Fragment() {
 
 
 
-        mDatePickerBtn.setOnClickListener {
+        date.setOnClickListener {
             DatePickerDialog(view.context,datepicker,calender.get(Calendar.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH)).show()
 
         }
@@ -130,17 +137,17 @@ class ajoutEvent : Fragment() {
 
 
 
-        capacity=view.findViewById(R.id.nembre)
+        capacity=view.findViewById(R.id.textInputPhoneProfile)
 
 
         mSharedPref = requireContext().getSharedPreferences(PREF_NAME, AppCompatActivity.MODE_PRIVATE);
         requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),PERMS_REQUEST_CODE);
-        image = view.findViewById(R.id.imageView3)
+        image = view.findViewById(R.id.lottie)
         image.setOnClickListener {startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), PICK_IMAGE_CODE) }
 
         super.onViewCreated(view, savedInstanceState)
 
-       val bot = view.findViewById<Button>(R.id.butajout)
+       val bot = view.findViewById<Button>(R.id.button3)
         bot.setOnClickListener {
             doAjout()
 
@@ -175,9 +182,10 @@ class ajoutEvent : Fragment() {
             //val body: MultipartBody.Part=MultipartBody.Part.createFormData("image",f.name,reqFile)
 
             val map: HashMap<String, RequestBody> = HashMap()
-            map["date"] =  mDatePickerBtn.text.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
+            map["date"] =  date.text.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
             map["titre"] = titre.editText?.text.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
             map["capacity"] = capacity.editText?.text.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
+            map["address"]=address.editText?.text.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
             //map["image"]= body
 
             CoroutineScope(Dispatchers.IO).launch {
@@ -194,6 +202,7 @@ class ajoutEvent : Fragment() {
                                 putString(TITRE, therapy.therapy.titre)
                                 putString(DATE, therapy.therapy.date)
                                 putString(IMAGE,therapy.therapy.image)
+                                putString(ADRESS,therapy.therapy.address)
                                 putInt(CAPACITY, therapy.therapy.capacity)
 
 

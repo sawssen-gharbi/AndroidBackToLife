@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.backtolife.R
 import com.example.backtolife.models.patient
 import com.squareup.picasso.MemoryPolicy
@@ -18,45 +19,26 @@ class ListPatientAdapter(val listpatient: MutableList<patient>):RecyclerView.Ada
         listpatient.addAll(list)
         notifyDataSetChanged()
     }
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val data: patient=listpatient[position]
+        Glide.with(holder.itemView).load(data.image).into(holder.img_user)
+        holder.fullName.text=data.fullName
+        holder.phone.text=data.phone
+    }
 
 
 
-        holder.bind(listpatient[position])
 
 
     override fun getItemCount(): Int = listpatient.size;
 
     class ViewHolder(view: View):RecyclerView.ViewHolder(view) {
-
-        fun bind(patient: patient) {
-
-            fullName?.text = patient.fullName
-
-            phone?.text = patient.phone
+        val fullName=view.findViewById<TextView>(R.id.name_user);
+        val phone=view.findViewById<TextView>(R.id.capacity);
+        val img_user = view.findViewById<ImageView>(R.id.img_user);
 
 
 
-            Picasso.get()
-                .load(patient.image)
-                .resize(300, 300)
-                .centerCrop()
-                .memoryPolicy(MemoryPolicy.NO_CACHE)
-                .placeholder(R.drawable.angryy)
-                .into(img_user!!)
-        }
-
-        private var phone: TextView?= null
-        private var fullName: TextView? = null
-        private var img_user: ImageView? = null
-
-
-        init {
-            phone=view.findViewById(R.id.capacity)
-            fullName=view.findViewById(R.id.name_user)
-            img_user = view.findViewById(R.id.img_user)
-
-        }
 
 
 

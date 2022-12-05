@@ -1,5 +1,6 @@
 package com.example.backtolife.API
 
+import com.example.backtolife.models.LoginResponse
 import com.example.backtolife.models.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -22,12 +23,23 @@ interface UserApi {
                 @Query("idUser") idUser: String
     ): Call<TherapyResponse>
 
-    @GET("therapy/{idUser}")
-    fun getTherapy(@Path("idUser") id: String?) : Call<List<Therapy>>
-    @GET("user/getUserByTherapy/{idTherapy}")
-    fun getUser(@Path("idTherapy") id: String?) : Call<List<patient>>
-    @PATCH("user/updateUser/{id}")
-    fun update(@Path("id") id: String?,@Body map : HashMap<String, String> ): Call<User>
+    @GET("therapy")
+    fun getTherapy(@Query("idUser") id: String?) : Call<List<Therapy>>
+    @GET("user/getUserByTherapy")
+    fun getUser(@Query("idTherapy") id: String?) : Call<List<patient>>
+    @PUT("user/updateUser/{id}")
+    fun editProfile(@Path("id") id: String?, @Body map: HashMap<String, String>): Call<User>
+    @POST("user/forgotPassword")
+    fun sendResetCode(@Body userReset: UserReset): Call<UserResetResponse>
+    @PUT("user/editPassword")
+    fun changePasswordReset(@Body passRes: UserResetPassword): Call<User>
+    @POST("therapy/deleteOnce/{id}")
+    fun deleteTherapy(@Path("id") id: String?): Call<Therapy>
+    @Multipart
+    @PATCH("user//updatePhoto")
+    fun uploadPhoto( @Part body: MultipartBody.Part): Call<User>
+
+
 
 
 

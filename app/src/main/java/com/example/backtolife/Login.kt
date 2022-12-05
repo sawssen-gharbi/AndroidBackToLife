@@ -3,15 +3,14 @@ package com.example.backtolife
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.util.Log
-import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.backtolife.API.UserApi
-import com.example.backtolife.fragments.HomeFragment
 import com.example.backtolife.models.LoginResponse
-import com.example.backtolife.models.User
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +29,7 @@ const val PHONE = "PHONE"
 const val SPECIALITY = "SPECIALITY"
 const val CERTIFICAT = "CERTIFICAT"
 class Login: AppCompatActivity() {
+    private var fpassword:TextView?=null
 
     lateinit var email : TextInputLayout
     lateinit var password : TextInputLayout
@@ -42,7 +42,7 @@ class Login: AppCompatActivity() {
         mSharedPref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
        val button = findViewById<Button>(R.id.buttonLogin)
         val but=findViewById<Button>(R.id.textButtonLogin)
-
+        fpassword=findViewById<TextView>(R.id.textViewForgetPassword)
         button.setOnClickListener{
             doLogin()
 
@@ -52,6 +52,12 @@ class Login: AppCompatActivity() {
             val intent = Intent(this@Login, SignUp::class.java)
             startActivity(intent)
         }
+        fpassword!!.setOnClickListener{
+            val mainIntent = Intent(this, forget_password ::class.java)
+            startActivity(mainIntent)
+            fpassword!!.movementMethod = LinkMovementMethod.getInstance();
+        }
+
 
 
 
@@ -75,7 +81,6 @@ class Login: AppCompatActivity() {
                         if (userInfo != null) {
                             mSharedPref.edit().apply {
                                 putString(ID, userInfo.userInfo._id)
-
                                 putString(PASSWORD, userInfo.userInfo.password)
                                 putString(EMAIL, userInfo.userInfo.email)
 
@@ -123,4 +128,5 @@ class Login: AppCompatActivity() {
         return true
 
     }
+
 }

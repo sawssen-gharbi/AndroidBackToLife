@@ -1,23 +1,91 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventDoctor">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:background="@color/smokyWhite"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:backgroundTint="@color/white"
-        >
+        android:layout_height="wrap_content"
+        android:background="@color/smokyWhite">
 
-    <!-- TODO: Update blank fragment layout -->
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:contentScrim="@color/colorPrimaryDark"
+            app:expandedTitleTextAppearance="@style/expandedBarTextStyle"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:title="@string/dashboard_title">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/custom_app_bar_background"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="70dp"
+                    android:text="@string/dashboard_heading"
+                    android:textColor="@android:color/white"
+                    android:textSize="30sp"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/dashboard_sub_title"
+                    android:textColor="@color/lightText"
+                    android:textSize="20sp"
+
+                    ></TextView>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/searchProductsBar"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:height="50dp"
+                    android:background="@drawable/search_bar_background"
+                    android:drawableEnd="@drawable/search_btn"
+                    android:hint="@string/search_bar_hint"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="5dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"></EditText>
+            </LinearLayout>
 
 
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleDoctor"
+                ></androidx.appcompat.widget.Toolbar>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <ScrollView
+        android:layout_marginTop="250dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleDoctor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
+
+    <!--    will be implementing recycler view insted of nested scroll view-->
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -55,7 +55,7 @@
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/therapytitle"
-        app:srcCompat="@drawable/background_border" />
+        app:srcCompat="@drawable/count_background" />
 
     <ImageView
         android:id="@+id/doctorimage"

@@ -4,15 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.backtolife.API.UserApi
-import com.example.backtolife.models.LoginResponse
 import com.example.backtolife.models.SignupResponse
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
@@ -61,7 +58,7 @@ class SignUp : AppCompatActivity() {
             val apiInterface = UserApi.create()
             val map: HashMap<String, String> = HashMap()
 
-            map["fullname"] = fullname.editText?.text.toString()
+            map["fullName"] = fullname.editText?.text.toString()
             map["email"] = email.editText?.text.toString()
             map["password"] = password.editText?.text.toString()
             map["role"] = role.text.toString()
@@ -85,6 +82,7 @@ class SignUp : AppCompatActivity() {
                         if (user != null  ) {
                             mSharedPref.edit().apply {
                                 putString(ID, user.user._id)
+                                putString(FULLNAME,user.user.fullName)
 
                             }.apply()
                          intent = Intent(this@SignUp, Login::class.java)
