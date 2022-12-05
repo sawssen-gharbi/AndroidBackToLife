@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:elevation="7dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/orange"
+                android:elevation="15dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Edit Your Report Informations"
+                android:textColor="@color/white"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageViewMoodEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="103dp"
+                android:layout_weight="1"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/textButtonDateEdit"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="11dp"
+                    android:text="SelectDate : "
+                    android:textColor="@color/orange" />
+
+                <TextView
+                    android:id="@+id/textViewSelectedDateEdit"
+                    android:layout_width="161dp"
+                    android:layout_height="wrap_content"
+                    android:text="New Date"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/orange" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewHowareyouEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Your Are Feeling:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewHappyEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Happy"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/textViewCalmEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Calm"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/textViewManicEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Manic"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/textViewAngryEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Angry"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/textViewSadEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Sad"
+                    android:textColor="@color/black" />
+            </RadioGroup>
+
+
+            <TextView
+                android:id="@+id/textViewDepressedMoodEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text=" Depressed Mood:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
+
+
+            <SeekBar
+                android:id="@+id/sliderDepressedEdit"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:valueFrom="0"
+                android:valueTo="100"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/textViewElevatedMoodEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+
+                android:text="Elevated Mood:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
+
+            <SeekBar
+                android:id="@+id/sliderElevatedEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:valueFrom="0"
+                android:valueTo="100" />
+
+            <TextView
+                android:id="@+id/textViewIrritabilityMoodEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Irritabililty Mood:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
+
+            <SeekBar
+                android:id="@+id/sliderIrritabilityEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+
+                android:valueFrom="0"
+                android:valueTo="100" />
+
+            <TextView
+                android:id="@+id/textViewPsychoticEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Psychotic symptoms:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
+
+            <RadioGroup
+                android:id="@+id/btnsPsychoticSymptomsEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+
+                <Button
+
+                    android:id="@+id/btnPsychoticSymptomsNoEdit"
+                    android:layout_width="78dp"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/blue"
+                    android:text="No" />
+
+                <Button
+
+                    android:id="@+id/PsychoticSymptomsYesEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="3dp"
+                    android:backgroundTint="@color/blue"
+                    android:text="Yes" />
+
+
+            </RadioGroup>
+
+        </LinearLayout>
+</LinearLayout>

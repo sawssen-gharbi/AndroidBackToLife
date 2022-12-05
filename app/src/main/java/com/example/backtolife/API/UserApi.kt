@@ -31,8 +31,11 @@ interface UserApi {
     @POST("report/deleteReport/{id}")
     fun deleteReport(@Path("id") id: String?): Call<Report>
 
+    @PUT("report/editReport/{id}")
+    fun editReport(@Path("id") id: String?, @Body map : HashMap<String, String>): Call<Report>
+
     companion object {
-        var BASE_URL = "http://192.168.1.17:7001/"
+        var BASE_URL = "http://192.168.1.18:7001/"
         fun create() : UserApi {
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
