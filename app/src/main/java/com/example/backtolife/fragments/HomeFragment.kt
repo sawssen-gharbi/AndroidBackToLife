@@ -17,6 +17,7 @@ import com.example.backtolife.API.UserApi
 import com.example.backtolife.models.ReportResponse
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.harrywhewell.scrolldatepicker.DayScrollDatePicker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,9 +40,10 @@ class HomeFragment : Fragment() , View.OnClickListener  {
 
 
     private lateinit var mSharedPref: SharedPreferences
-    private lateinit var mDatePickerBtn: Button
 
-    private lateinit var textSelectedDate: TextView
+    lateinit var dayDatePicker : DayScrollDatePicker
+    lateinit var SelectedDate : String
+
     private lateinit var btnAdd: Button
     private lateinit var btnSignOut: Button
 
@@ -68,6 +70,8 @@ class HomeFragment : Fragment() , View.OnClickListener  {
 
     private lateinit var btnPSNo: Button
     private lateinit var btnPSYes: Button
+
+
 
     lateinit var textViewName: TextView
 
@@ -108,8 +112,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
 
         btnAdd = view.findViewById(R.id.buttonAdd)
 
-        mDatePickerBtn = view.findViewById(R.id.textButtonDate)
-        textSelectedDate = view.findViewById(R.id.textViewSelectedDate)
+
 
         imageHappy = view.findViewById(R.id.imageViewHappy)
         textHappy = view.findViewById(R.id.textViewHappy)
@@ -137,7 +140,8 @@ class HomeFragment : Fragment() , View.OnClickListener  {
         btnPSNo = view.findViewById(R.id.btnPsychoticSymptomsNo)
         btnPSYes = view.findViewById(R.id.PsychoticSymptomsYes)
 
-        btnSignOut = view.findViewById(R.id.buttonSignOut)
+       // btnSignOut = view.findViewById(R.id.buttonSignOut)
+         dayDatePicker = view.findViewById(R.id.dayDatePicker)
 
         //Google Sign In
 
@@ -160,33 +164,36 @@ class HomeFragment : Fragment() , View.OnClickListener  {
             }
         }
 
-        btnSignOut.setOnClickListener {
-            signOut()
-        }
+        // btnSignOut.setOnClickListener {
+            //  signOut()
+            //  }
 
             //Date Picker
-    val calender = Calendar.getInstance()
+   // val calender = Calendar.getInstance()
 
-    fun updateTable(c: Calendar) {
-        val mf = "dd-MM-yyyy"
-        val sdf = SimpleDateFormat(mf, Locale.FRANCE)
-        textSelectedDate.setText(sdf.format(c.time))
+   // fun updateTable(c: Calendar) {
+            // val mf = "dd-MM-yyyy"
+            // val sdf = SimpleDateFormat(mf, Locale.FRANCE)
+            //textSelectedDate.setText(sdf.format(c.time))
 
-    }
+            //}
 
-    val datepicker = DatePickerDialog.OnDateSetListener { view, year, month, day ->
-        calender.set(Calendar.YEAR, year)
-        calender.set(Calendar.MONTH, month)
-        calender.set(Calendar.DAY_OF_MONTH, day)
+   // val datepicker = DatePickerDialog.OnDateSetListener { view, year, month, day ->
+    //calender.set(Calendar.YEAR, year)
+    //calender.set(Calendar.MONTH, month)
+    //calender.set(Calendar.DAY_OF_MONTH, day)
 
-        updateTable(calender)
+    // updateTable(calender)
 
-    }
-            mDatePickerBtn.setOnClickListener {
-           DatePickerDialog(view.context,datepicker,calender.get(Calendar.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH)).show()
+    // }
 
-        }
 
+    dayDatePicker.setStartDate(1, 11, 2022)
+    dayDatePicker.getSelectedDate {
+
+    SelectedDate = it.toString()
+    Toast.makeText(context, SelectedDate, Toast.LENGTH_SHORT).show()
+}
 
             //OnClick Method
             imageHappy.setOnClickListener(this)
@@ -268,14 +275,14 @@ class HomeFragment : Fragment() , View.OnClickListener  {
 
 
                 map["user"] = mSharedPref.getString(ID, "")!!
-                map["date"] = textSelectedDate.text.toString()
+                map["date"] = SelectedDate.toString()
                 map["depressedMood"] = sDepressed.progress.toString()
                 map["elevatedMood"] = sElevated.progress.toString()
                 map["irritabilityMood"] = sIrritability.progress.toString()
 
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    apiInterface.addReport(map,map["user"].toString()).enqueue(object : Callback<ReportResponse> {
+                    apiInterface.addReport(map,mSharedPref.getString(ID, "").toString()).enqueue(object : Callback<ReportResponse> {
                         override fun onResponse(
                             call: Call<ReportResponse>, response:
                             Response<ReportResponse>

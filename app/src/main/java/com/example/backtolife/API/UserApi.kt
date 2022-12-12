@@ -2,8 +2,6 @@ package com.example.backtolife.API
 
 import com.example.backtolife.LoginGoogleResponse
 import com.example.backtolife.models.*
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable
-import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -17,6 +15,10 @@ interface UserApi {
     fun login(@Body map : HashMap<String, String> ): Call<LoginResponse>
     @POST("user/loginGoogle")
     fun loginGoogle(@Body map : HashMap<String, String> ): Call<LoginGoogleResponse>
+
+    @Multipart
+    @POST("user/editLoginGoogle/{id}")
+    fun editedLoginGoogle(@Path("id") id: String?, @PartMap map : HashMap<String, RequestBody>, @Part body: MultipartBody.Part?): Call<LoginGoogleResponse>
 
     @Multipart
     @POST("user/signup")
@@ -35,7 +37,7 @@ interface UserApi {
     fun editReport(@Path("id") id: String?, @Body map : HashMap<String, String>): Call<Report>
 
     companion object {
-        var BASE_URL = "http://192.168.1.18:7001/"
+        var BASE_URL = "http://192.168.1.12:7001/"
         fun create() : UserApi {
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())

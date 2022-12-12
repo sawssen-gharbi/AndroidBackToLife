@@ -5,27 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/special"
-    tools:context=".MainActivityGoogle">
+    tools:context=".MainActivityFacebook">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/frameLayoutGoogle"
-        android:layout_width="341dp"
-        android:layout_height="212dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/more_infos"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        <FrameLayout
+            android:id="@+id/frameLayoutFacebook"
+            android:layout_width="341dp"
+            android:layout_height="212dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/more_infos"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+        </FrameLayout>
 
 
         <RadioGroup
-            android:id="@+id/radioGroupWelcomeGoogle"
+            android:id="@+id/radioGroupWelcomeFacebook"
             android:layout_width="335dp"
             android:layout_height="34dp"
             android:layout_marginTop="32dp"
@@ -33,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.494"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayoutGoogle">
+            app:layout_constraintTop_toBottomOf="@+id/frameLayoutFacebook">
 
             <TextView
                 android:id="@+id/textViewW"
@@ -45,7 +45,7 @@
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/textViewUserGoogle"
+                android:id="@+id/textViewUserFacebook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
@@ -64,7 +64,7 @@
 
 
         <CheckBox
-            android:id="@+id/checkBoxDoctorGoogle"
+            android:id="@+id/checkBoxDoctorFacebook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -89,11 +89,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.494"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupWelcomeGoogle" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupWelcomeFacebook" />
 
 
         <RadioGroup
-            android:id="@+id/certificatGooglecertificatGoogle"
+            android:id="@+id/certificatGooglecertificatFacebook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
@@ -101,7 +101,7 @@
             android:orientation="horizontal"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxDoctorGoogle">
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxDoctorFacebook">
 
             <TextView
                 android:id="@+id/textViewCeriticat"
@@ -126,7 +126,7 @@
             android:layout_width="88dp"
             android:layout_height="76dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/certificatGooglecertificatGoogle"
+            app:layout_constraintBottom_toTopOf="@+id/certificatGooglecertificatFacebook"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.786"
             app:layout_constraintStart_toStartOf="parent"
@@ -145,7 +145,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/certificatGooglecertificatGoogle"
+            app:layout_constraintTop_toBottomOf="@+id/certificatGooglecertificatFacebook"
             app:layout_constraintVertical_bias="0.677">
 
         </Button>

@@ -224,7 +224,21 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
     }
 
         fun deleteItem(index: Int) {
-            reports.removeAt(index)
+
+            com.example.backtolife.fragments.apiInterface.deleteReport(reports.removeAt(index)._id)
+                .enqueue(object: Callback<Report> {
+                    override fun onResponse(call: Call<Report>, response: Response<Report>)
+                    {
+                        if (response.isSuccessful){
+                            Log.i("Report Deleted", response.body().toString())
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Report>, t: Throwable)
+                    {
+                        println("okay")
+                    }
+                })
             notifyDataSetChanged()
         }
 

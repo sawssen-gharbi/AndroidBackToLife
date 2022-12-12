@@ -16,7 +16,7 @@ private lateinit var doctorArrayList : ArrayList<doctor>
 
 lateinit var img : Array<Int>
 lateinit var capacity : Array<String>
-lateinit var date : Array<String>
+private lateinit var date : Array<String>
 lateinit var title: Array<String>
 
 class EventDoctor : Fragment() {

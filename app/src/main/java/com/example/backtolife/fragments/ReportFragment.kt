@@ -58,6 +58,7 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
                         recyclerView = rootview.findViewById(R.id.recycleViewReport)
                         adapter = MyReportAdapter(response.body()!! as MutableList<Report>)
 
+
                         recyclerView.layoutManager = LinearLayoutManager(
                             context, LinearLayoutManager.VERTICAL,
                             false
@@ -72,20 +73,7 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
                                 builder.setTitle("Delete Item")
                                 builder.setMessage("Are you sure you want to delete item")
                                 builder.setPositiveButton("Confirm") { dialog, which ->
-                                    apiInterface.deleteReport(mSharedPref.getString(IDREPORT, "").toString())
-                                        .enqueue(object: Callback<Report> {
-                                            override fun onResponse(call: Call<Report>, response: Response<Report>)
-                                            {
-                                                if (response.isSuccessful){
-                                                    Log.i("Report Deleted", response.body().toString())
-                                                }
-                                            }
-
-                                            override fun onFailure(call: Call<Report>, t: Throwable)
-                                            {
-                                                println("okay")
-                                            }
-                                        })
+                                adapter.deleteItem(viewHolder.adapterPosition)
                                 }
 
                                 builder.setNegativeButton("Cancel") { dialog, which ->

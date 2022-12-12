@@ -1,6 +1,5 @@
 package com.example.backtolife
 
-import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -11,13 +10,13 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import com.example.backtolife.API.UserApi
 import com.example.backtolife.models.SignupResponse
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -27,6 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.util.Optional.empty
 
 
 const val PREF_NAME = "DATA_PREF"
@@ -38,7 +38,7 @@ const val FULLNAME = "FULLNAME"
 const val PASSWORD = "PASSWORD"
 const val PHONE = "PHONE"
 const val SPECIALITY = "SPECIALITY"
-const val IMAGE = "IMAGE"
+const val CERTIFICATE = "CERTIFICATE"
 
 //Image
 const val PICK_IMAGE_CODE = 100
@@ -48,7 +48,7 @@ const val PREFS_NAME = "APP_PREFS"
 const val REQUEST_GALLERY = 9544
 class SignUp : AppCompatActivity() {
 
-    lateinit var path:String
+
     lateinit var email: TextInputLayout
     lateinit var password: TextInputLayout
     lateinit var fullname: TextInputLayout
@@ -58,13 +58,19 @@ class SignUp : AppCompatActivity() {
     lateinit var btn: Button
     lateinit var bttn: Button
 
+
     private lateinit var mSharedPref: SharedPreferences
 
 
     //Image
-    lateinit var image: ImageView
-    var multipartImage: MultipartBody.Part? = null
+    private  var path: String? =""
+    private lateinit var image: ImageView
+    private var multipartImage: MultipartBody.Part? = null
     private var imageU: Uri? = null
+    private  var body: MultipartBody.Part?= null
+    private var reqFile: RequestBody? = null
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(/* requestCode = */ requestCode, /* resultCode = */
             resultCode, /* data = */
@@ -146,22 +152,32 @@ class SignUp : AppCompatActivity() {
             //image
             val f=File(path)
 
-            val reqFile:RequestBody= f.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            Log.e("file",reqFile.toString())
-            val body: MultipartBody.Part=MultipartBody.Part.createFormData("image",f.name,reqFile)
 
             map["fullName"] = fullname.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
             map["email"] = email.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
             map["password"] = password.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-            if(role.isChecked){
-                map["role"] = role.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-            }else{
-                map["role"] = rolee.trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
+            if(role.isChecked) {
+                if (f != null) {
+                    Log.e("file", reqFile.toString())
+
+                    reqFile = f.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                    body = MultipartBody.Part.createFormData("certificate", f.name, reqFile!!)
+                    map["role"] = role.text.toString().trim()
+                        .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                } else {
+                    map["role"] =
+                        rolee.trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+                    //reqFile = f.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    //body = MultipartBody.Part.createFormData("certificate", "", reqFile!!)
+
+                }
             }
 
 
+
             CoroutineScope(Dispatchers.IO).launch {
-                apiInterface.signup(map, body).enqueue(object : Callback<SignupResponse> {
+                apiInterface.signup(map, body!!).enqueue(object : Callback<SignupResponse> {
                     override fun onResponse(
                         call: Call<SignupResponse>, response:
                         Response<SignupResponse>
@@ -176,7 +192,7 @@ class SignUp : AppCompatActivity() {
                                 putString(PASSWORD, user.user.password)
                                 putString(EMAIL, user.user.email)
                                 putString(FULLNAME, user.user.fullName)
-                                putString(IMAGE,user.user.image)
+                                putString(CERTIFICATE,user.user.certificate)
                             }.apply()
 
                             intent = Intent(this@SignUp, Login::class.java)
@@ -192,7 +208,7 @@ class SignUp : AppCompatActivity() {
 
 
                     override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
-                        Log.e("password: ", t.message.toString())
+                        Log.e("certificate ", t.message.toString())
                         Toast.makeText(this@SignUp, "Connexion error!", Toast.LENGTH_SHORT)
                             .show()
 

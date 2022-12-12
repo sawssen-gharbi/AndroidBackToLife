@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    tools:context=".HomeFragment" >
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:background="@drawable/sp_bg">
 
             <TextView
-                android:id="@+id/textViewHi"
+                android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -28,21 +28,6 @@
                 app:layout_constraintHorizontal_bias="0.086"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:textColor="#ffffff"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/textView8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.067"
-                app:layout_constraintStart_toEndOf="@+id/textViewHi"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.75" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -58,7 +43,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.087"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewHi" />
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -262,7 +247,7 @@
                                 android:id="@+id/sliderDepressed"
                                 android:layout_width="321dp"
                                 android:layout_height="wrap_content"
-                           />
+                                android:layout_marginEnd="20dp" />
 
                             <TextView
                                 android:id="@+id/textViewPourDep"
@@ -304,7 +289,7 @@
                                 android:id="@+id/sliderElevated"
                                 android:layout_width="321dp"
                                 android:layout_height="wrap_content"
-                              />
+                                android:layout_marginEnd="20dp" />
 
                             <TextView
                                 android:id="@+id/textViewPourEl"
@@ -347,7 +332,8 @@
                             <SeekBar
                                 android:id="@+id/sliderIrritability"
                                 android:layout_width="321dp"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="20dp" />
 
                             <TextView
                                 android:id="@+id/textViewPourIrr"
@@ -363,22 +349,21 @@
                         android:id="@+id/textViewPsychotic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/c4"
                         android:layout_marginLeft="10dp"
+                        android:layout_below="@+id/c4"
                         android:text="Psychotic symptoms today:"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@color/black"
 
                         />
-
                     <RadioGroup
                         android:id="@+id/btnsPsychoticSymptoms"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/textViewPsychotic"
+                        android:orientation="horizontal"
                         android:layout_marginLeft="105dp"
                         android:layout_marginTop="15dp"
-                        android:orientation="horizontal">
+                        android:layout_below="@+id/textViewPsychotic">
 
 
                         <Button
@@ -418,6 +403,8 @@
                         app:tint="@color/white" />
 
                 </RelativeLayout>
+
+
 
 
             </LinearLayout>
