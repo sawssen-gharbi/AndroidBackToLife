@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">BackToLife</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="capacity">50</string>
+    <string name="date">12/06/2023</string>
+    <string name="title1">Relaxation</string>
+    <string name="title2">Nature</string>
+    <string name="title4">Rania</string>
+    <string name="title5">Sawssen</string>
+    <string name="title3">Hamza</string>
+    <string name="titre">Relaxation</string>
+    <string name="titre1">Nature</string>
+    <string name="angry">hey im angry</string>
+    <string name="sad">hey im sad</string>
+    <string name="happy">hey im happy</string>
+
+    <string name="depressed"> Depression : 10% </string>
+    <string name="elevated"> Elevation : 50% </string>
+    <string name="irritability"> Irritability : 0% </string>
+    <string name="psychotic"> Psychotic symptoms:  no </string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_heading">Find Amazing therapies happening around you.</string>
+    <string name="dashboard_sub_title">my list of therapies</string>
+    <string name="search_bar_hint">search for an event...</string>
+    <string name="dummy_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Accumsan in nisl nisi scelerisque eu. Semper feugiat nibh sed pulvinar proin gravida. Quisque sagittis purus sit amet. Faucibus turpis in eu mi bibendum. Quisque egestas diam in arcu cursus euismod quis viverra. Dictumst quisque sagittis purus sit amet volutpat consequat. Tristique risus nec feugiat in. Nunc id cursus metus aliquam. Fames ac turpis egestas maecenas pharetra convallis posuere morbi leo. Leo integer malesuada nunc vel. Ac feugiat sed lectus vestibulum mattis ullamcorper velit. Pulvinar etiam non quam lacus suspendisse faucibus. Donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. Montes nascetur ridiculus mus mauris vitae ultricies leo integer malesuada. Vehicula ipsum a arcu cursus vitae congue. Ultrices dui sapien eget mi proin sed libero enim. Fermentum iaculis eu non diam phasellus. Vitae semper quis lectus nulla. Eget aliquet nibh praesent tristique magna sit amet purus.</string>
+    <string name="facebook_application_id">1184426499116164</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">56789</string>
+    <string name="logout">Logout</string>
+
+
+
+    <string name="infos"> If you are logging in as a Patient  just click next \n If you are a doctor , check the box </string>
+</resources>
