@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -30,7 +32,9 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate.now
 import java.util.*
 
 
@@ -48,7 +52,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
     private lateinit var mSharedPref: SharedPreferences
 
     lateinit var dayDatePicker : DayScrollDatePicker
-    lateinit var SelectedDate : String
+    lateinit var SelectedDate : Date
 
     private lateinit var btnAdd: Button
     private lateinit var btnSignOut: Button
@@ -109,6 +113,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
@@ -306,11 +311,20 @@ class HomeFragment : Fragment() , View.OnClickListener  {
         // }
 
 
-        dayDatePicker.setStartDate(1, 11, 2022)
+
         dayDatePicker.getSelectedDate {
 
-            SelectedDate = it.toString()
-            Toast.makeText(context, SelectedDate, Toast.LENGTH_SHORT).show()
+            if (it != null) {
+                SelectedDate = it
+            }
+            Toast.makeText(context, SelectedDate.toString(), Toast.LENGTH_SHORT).show()
+            Log.e("date",DateFormat.getDateInstance(DateFormat.SHORT).format(SelectedDate))
+        }
+
+        fun updateTable(c: Calendar) {
+            val mf = "dd-MM-yyyy"
+            val sdf = SimpleDateFormat(mf, Locale.FRANCE)
+
         }
 
         //OnClick Method
