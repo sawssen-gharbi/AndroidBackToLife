@@ -181,7 +181,7 @@ class ajoutEvent : Fragment() {
     }
 
     private fun doAjout() {
-        if (isValide()){
+        if (isValide1()){
             val apiInterface = UserApi.create()
 
 
@@ -248,3 +248,6 @@ class ajoutEvent : Fragment() {
 
 
 
+private fun isValide1(): Boolean {
+    return true
+}

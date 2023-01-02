@@ -1,19 +1,20 @@
 package com.example.backtolife
 
+import android.app.Activity
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.example.backtolife.fragments.HomeFragment
-import com.example.backtolife.fragments.ListesFragment
 import com.example.backtolife.fragments.ProfileFragment
 import com.example.backtolife.fragments.ReportFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,16 +30,31 @@ class MainActivityPatient : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
     private lateinit var topAppBar : Toolbar
+    private lateinit var mSharedPref: SharedPreferences
 
+    private lateinit var header : View
+    private lateinit var  fullNameHeader : TextView
+    private lateinit var  emailHeader : TextView
+    private lateinit var  imageHeader : ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_patient)
-        loadFragment(HomeFragment())
         bottomNav = findViewById(R.id.bottomNavigationView_patient)
+
+
+
+
+        refresh(HomeFragment(),title.toString())
+
+
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
         topAppBar = findViewById(R.id.topAppBar)
+
+        supportActionBar?.setDisplayShowTitleEnabled(true);
+
+
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
 
@@ -49,6 +65,7 @@ class MainActivityPatient : AppCompatActivity() {
 
         topAppBar.setNavigationOnClickListener {
             drawerLayout.open()
+
         }
 
         navView.setNavigationItemSelectedListener { menuItem ->
@@ -57,23 +74,41 @@ class MainActivityPatient : AppCompatActivity() {
 
             when (menuItem.itemId) {
 
-                R.id.navHome -> refresh(ProfileFragment(),menuItem.title.toString())
-                R.id.navReport -> refresh(ReportFragment(),menuItem.title.toString())
+                R.id.navTM -> redirectActivity(this,LearnActivity::class.java)
+                R.id.navBreath ->  redirectActivity(this,BreathActivity::class.java)
+                //R.id.navMessage ->
             }
             drawerLayout.close()
             true
 
         }
 
-        bottomNav.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.itemHome -> loadFragment(HomeFragment())
+        mSharedPref = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
 
-                R.id.itemReport -> loadFragment(ReportFragment())
+        // header
+        header = navView.getHeaderView(0)
+        fullNameHeader = header.findViewById(R.id.fullNameHeader)
+        emailHeader = header.findViewById(R.id.emailHeader)
+        imageHeader = header.findViewById<ImageView>(R.id.imageHeader)
 
-                R.id.itemTherapy -> loadFragment(listTherapy())
+        val textName = mSharedPref.getString(FULLNAME, "").toString()
+        val textEmail = mSharedPref.getString(EMAIL, "").toString()
 
-                R.id.itemProfile -> loadFragment(ProfileFragment())
+        fullNameHeader.text = textName
+        emailHeader.text = textEmail
+
+
+
+        bottomNav.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.itemHome ->{ refresh(HomeFragment(),menuItem.title.toString())
+                }
+
+                R.id.itemReport -> refresh (ReportFragment(),menuItem.title.toString())
+
+                R.id.itemTherapy -> refresh(listTherapy(),menuItem.title.toString())
+
+                R.id.itemProfile -> refresh(ProfileFragment(),menuItem.title.toString())
 
             }
             true
@@ -94,11 +129,11 @@ class MainActivityPatient : AppCompatActivity() {
         fragmentTransaction.commit()
         setTitle(title)
     }
-    private  fun loadFragment(fragment: Fragment){
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout_patient,fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+
+
+    fun redirectActivity(activity: Activity, Class: Class<*>?) {
+        val intent = Intent(activity, Class)
+        activity.startActivity(intent)
     }
 
 }

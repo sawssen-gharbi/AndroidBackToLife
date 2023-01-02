@@ -1,9 +1,12 @@
 package com.example.backtolife.fragments
 
-import android.app.DatePickerDialog
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,17 +14,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.airbnb.lottie.LottieAnimationView
 import com.example.backtolife.*
 import com.example.backtolife.API.UserApi
 import com.example.backtolife.models.ReportResponse
+import com.example.studentchat.Interface.RealPathUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.slider.Slider
 import com.harrywhewell.scrolldatepicker.DayScrollDatePicker
@@ -33,8 +37,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.DateFormat
-import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDate.now
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -46,13 +51,20 @@ const val IRRITABILITYMOOD = "IRRITABILITYMOOD"
 const val SYMPTOMS = "SYMPTOMS"
 const val IDREPORT = "IDREPORT"
 
+val map: HashMap<String, String> = HashMap()
+
+private lateinit var mSharedPref: SharedPreferences
+
+
+
+
+
 class HomeFragment : Fragment() , View.OnClickListener  {
 
 
-    private lateinit var mSharedPref: SharedPreferences
 
     lateinit var dayDatePicker : DayScrollDatePicker
-    lateinit var SelectedDate : Date
+    private var SelectedDate : Date = Date()
 
     private lateinit var btnAdd: Button
     private lateinit var btnSignOut: Button
@@ -84,7 +96,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
 
     private lateinit var drawerlayout: DrawerLayout
     private lateinit var navigationview: NavigationView
-    private lateinit var topappbar: Toolbar
+
 
 
     lateinit var textViewName: TextView
@@ -92,8 +104,13 @@ class HomeFragment : Fragment() , View.OnClickListener  {
     var startPoint = 0
     var endPoint = 0
 
-    val map: HashMap<String, String> = HashMap()
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMS_REQUEST_CODE ->if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {mSharedPref.edit().putBoolean(IS_GRANTED_READ_IMAGES, true).apply()}
+            else { super.onRequestPermissionsResult(requestCode, permissions, grantResults)}
+        }
+    }
 
 
     override fun onCreateView(
@@ -106,6 +123,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
 
         // Inflate the layout for this fragment
         refresh(context)
+
         return   inflater.inflate(R.layout.fragment_home, container, false)
 
 
@@ -125,6 +143,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
         val textName = mSharedPref.getString(FULLNAME, "").toString()
         textViewName = view.findViewById(R.id.textViewName)
         textViewName.text = textName
+
 
         btnAdd = view.findViewById(R.id.buttonAdd)
 
@@ -311,21 +330,16 @@ class HomeFragment : Fragment() , View.OnClickListener  {
         // }
 
 
-
         dayDatePicker.getSelectedDate {
 
             if (it != null) {
                 SelectedDate = it
             }
             Toast.makeText(context, SelectedDate.toString(), Toast.LENGTH_SHORT).show()
-            Log.e("date",DateFormat.getDateInstance(DateFormat.SHORT).format(SelectedDate))
+            Log.e("date",DateFormat.getDateInstance().format(SelectedDate))
         }
 
-        fun updateTable(c: Calendar) {
-            val mf = "dd-MM-yyyy"
-            val sdf = SimpleDateFormat(mf, Locale.FRANCE)
 
-        }
 
         //OnClick Method
         imageHappy.setOnClickListener(this)
@@ -385,50 +399,60 @@ class HomeFragment : Fragment() , View.OnClickListener  {
             textPourIrr.text = value.toInt().toString()
         }
 
-
+        map["mood"] = textHappy.text.toString()
+        imageHappy.setImageResource(R.drawable.happy_outline)
 
         btnAdd.setOnClickListener {
+            if (isValide()) {
 
 
-            map["user"] = mSharedPref.getString(ID, "")!!
-            map["date"] = SelectedDate.toString()
-            map["depressedMood"] = sDepressed.value.toString()
-            map["elevatedMood"] = sElevated.value.toString()
-            map["irritabilityMood"] = sIrritability.value.toString()
+                map["user"] = mSharedPref.getString(ID, "")!!
+                map["date"] = DateFormat.getDateInstance().format(SelectedDate).toString()
+                map["depressedMood"] = sDepressed.value.toString()
+                map["elevatedMood"] = sElevated.value.toString()
+                map["irritabilityMood"] = sIrritability.value.toString()
 
 
-            CoroutineScope(Dispatchers.IO).launch {
-                apiInterface.addReport(map,mSharedPref.getString(ID, "").toString()).enqueue(object : Callback<ReportResponse> {
-                    override fun onResponse(
-                        call: Call<ReportResponse>, response:
-                        Response<ReportResponse>
-                    ) {
-                        val report = response.body()
-                        Log.e("iduser",map["user"].toString())
-                        Log.e("success: ", report.toString())
-                        if (report != null) {
-                            mSharedPref.edit().apply {
-                                putString(IDREPORT,report.report._id)
-                                putString(DATE, report.report.date)
-                                putString(MOOD, report.report.mood)
-                                putString(DEPRESSEDMOOD, report.report.depressedMood.toString())
-                                putString(ELEVATEDMOOD, report.report.elevatedMood.toString())
-                                putString(
-                                    IRRITABILITYMOOD,
-                                    report.report.irritabilityMood.toString()
-                                )
+                CoroutineScope(Dispatchers.IO).launch {
+                    apiInterface.addReport(map, mSharedPref.getString(ID, "").toString())
+                        .enqueue(object : Callback<ReportResponse> {
+                            override fun onResponse(
+                                call: Call<ReportResponse>, response:
+                                Response<ReportResponse>
+                            ) {
+                                val report = response.body()
+                                Log.e("iduser", map["user"].toString())
+                                Log.e("success: ", report.toString())
+                                if (report != null) {
+                                    mSharedPref.edit().apply {
+                                        putString(IDREPORT, report.report._id)
+                                        putString(DATE, report.report.date)
+                                        putString(MOOD, report.report.mood)
+                                        putString(
+                                            DEPRESSEDMOOD,
+                                            report.report.depressedMood.toString()
+                                        )
+                                        putString(
+                                            ELEVATEDMOOD,
+                                            report.report.elevatedMood.toString()
+                                        )
+                                        putString(
+                                            IRRITABILITYMOOD,
+                                            report.report.irritabilityMood.toString()
+                                        )
 
-                            }.apply()
+                                    }.apply()
 
 
-                        }
-                    }
+                                }
+                            }
 
 
-                    override fun onFailure(call: Call<ReportResponse>, t: Throwable) {
-                        println("messin")
-                    }
-                })
+                            override fun onFailure(call: Call<ReportResponse>, t: Throwable) {
+                                println("messin")
+                            }
+                        })
+                }
             }
         }
 
@@ -436,7 +460,11 @@ class HomeFragment : Fragment() , View.OnClickListener  {
 
 
 
+
+
         super.onViewCreated(view, savedInstanceState)
+
+
     }
 
     override fun onClick(p0: View?) {
@@ -497,18 +525,32 @@ class HomeFragment : Fragment() , View.OnClickListener  {
                 }
                 R.id.PsychoticSymptomsYes -> {
                     map["symptoms"] = btnPSYes.text.toString()
-                    Toast.makeText(context,"Your choice is " + map["symptoms"],Toast.LENGTH_SHORT).show()
+                    btnPSYes.setTextColor(Color.BLACK)
+                    btnPSNo.setTextColor(Color.WHITE)
                 }
                 R.id.btnPsychoticSymptomsNo -> {
                     map["symptoms"] = btnPSNo.text.toString()
-                    Toast.makeText(context,"Your choice is " + map["symptoms"],Toast.LENGTH_SHORT).show()
+                    btnPSNo.setTextColor(Color.BLACK)
+                    btnPSYes.setTextColor(Color.WHITE)
+
+
                 }
 
 
             }
         }
     }
+
+    private fun isValide(): Boolean {
+        if(SelectedDate.equals(null)){
+            Log.e("null","null")
+        }
+        return true
+    }
 }
+
+
+
 
 
 fun refresh(context: Context?) {
@@ -528,9 +570,8 @@ fun refresh(context: Context?) {
 
 
 
-fun isValide(): Boolean {
-    return true
-}
+
+
 
 
 

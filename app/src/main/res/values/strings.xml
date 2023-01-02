@@ -30,7 +30,7 @@
     <string name="logout">Logout</string>
 
 
-    <string name="infos"> If you are logging in as a Patient  just click next \n If you are a doctor , check the box </string>
+    <string name="infos"> Check The Box If You Are A Doctor  \n \n If Not Click On Next </string>
     <string name="title_activity_main">MainActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -43,5 +43,12 @@
 
     <string name="open">open</string>
     <string name="close">close</string>
+    <string name="str_end">Stop</string>
+    <string name="str_start">Start</string>
+    <string name="page_title">Home</string>
+    <string name="page_reports">Reports</string>
+    <string name="page_events">List</string>
+    <string name="vi">"https://happy.videvo.net/videvo_files/video/premium/partners0211/large_watermarked/BB_baafc586–3959-4a2d-be68-e1c248e390d6_preview.mp4"</string>
+
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.backtolife.API
 
+import com.example.backtolife.LoginFacebookResponse
 import com.example.backtolife.LoginGoogleResponse
 import com.example.backtolife.models.LoginResponse
 import com.example.backtolife.models.*
@@ -16,6 +17,9 @@ interface UserApi {
     fun login(@Body map : HashMap<String, String> ): Call<LoginResponse>
     @POST("user/loginGoogle")
     fun loginGoogle(@Body map : HashMap<String, String> ): Call<LoginGoogleResponse>
+
+    @POST("user/loginFacebook")
+    fun loginFacebook(@Body map : HashMap<String, String> ): Call<LoginFacebookResponse>
 
     @Multipart
     @POST("user/editLoginGoogle/{id}")

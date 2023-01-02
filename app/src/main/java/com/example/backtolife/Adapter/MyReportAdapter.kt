@@ -19,6 +19,7 @@ import com.example.backtolife.R
 import com.example.backtolife.fragments.DEPRESSEDMOOD
 import com.example.backtolife.fragments.IDREPORT
 import com.example.backtolife.models.Report
+import com.google.android.material.chip.Chip
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,12 +51,19 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
 
         val dateReport = reports[position].date
         val moodReport = reports[position].mood
+        val chipDe = reports[position].depressedMood
+        val chipEl = reports[position].elevatedMood
+        val chipIr = reports[position].irritabilityMood
+        val chipPs = reports[position].symptoms
 
 
         val psyReport = reports[position].symptoms
         holder.date.text = dateReport
         holder.mood.text = moodReport
-        holder.psychotic.text = psyReport
+        holder.chipDepressed.text = "Depression $chipDe%"
+        holder.chipElevation.text = "Elevation $chipEl%"
+        holder.chipIrritability.text = "Irritability $chipIr%"
+        holder.chipPsychotic.text = "Psychotic $chipPs"
 
         when (moodReport) {
             "Happy" -> holder.imagee.setImageResource(R.drawable.happyy)
@@ -66,21 +74,12 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
         }
 
 
-        val seekDepressed = reports[position].depressedMood
-        holder.depressedMood.progress = seekDepressed
-        holder.depressedMood.isEnabled = false
-        holder.depressedText.text = "$seekDepressed"
 
 
-        val seekElevation = reports[position].elevatedMood
-        holder.elevatedMood.progress = seekElevation
-        holder.elevatedMood.isEnabled = false
-        holder.elevationText.text = "$seekElevation"
 
-        val seekIrritbility = reports[position].irritabilityMood
-        holder.irritabilityMood.progress = seekIrritbility
-        holder.irritabilityMood.isEnabled = false
-        holder.irritabilityText.text = "$seekIrritbility"
+
+
+
 
 
 
@@ -95,13 +94,10 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
 
         val date = itemView.findViewById<TextView>(R.id.dateReport)
         val mood = itemView.findViewById<TextView>(R.id.tvMoodReport)
-        val psychotic = itemView.findViewById<TextView>(R.id.psychotic)
-        val depressedMood = itemView.findViewById<SeekBar>(R.id.sb1)
-        val elevatedMood = itemView.findViewById<SeekBar>(R.id.sb2)
-        val irritabilityMood = itemView.findViewById<SeekBar>(R.id.sb3)
-        val depressedText = itemView.findViewById<TextView>(R.id.depressedText)
-        val elevationText = itemView.findViewById<TextView>(R.id.elevationText)
-        val irritabilityText = itemView.findViewById<TextView>(R.id.irritabilityText)
+        val chipDepressed = itemView.findViewById<Chip>(R.id.chip_1)
+        val chipElevation = itemView.findViewById<Chip>(R.id.chip_2)
+        val chipIrritability = itemView.findViewById<Chip>(R.id.chip_3)
+        val chipPsychotic = itemView.findViewById<Chip>(R.id.chip_4)
 
 
         val imagee = itemView.findViewById<ImageView>(R.id.title_image_report)

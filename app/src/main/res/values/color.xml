@@ -29,6 +29,14 @@
     <color name="back">#f18c8e</color>
     <color name="pink"> #f18c8e</color>
     <color name="darkpink"> #bb7f87</color>
+    <color name="newpink">#fce4e4</color>
+    <color name="newwhite">#efeaea</color>
+    <color name="green_505">#558AA771</color>
+    <color name="green_700">#FF60794a</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="transparent">#00000000</color>
+    <color name="orange_500">#FFFF9F9E</color>
 
 
 

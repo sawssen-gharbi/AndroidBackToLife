@@ -1,9 +1,11 @@
 package com.example.backtolife
 
+import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -101,7 +103,9 @@ class MainActivityGoogle : AppCompatActivity() {
             }
         }
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),PERMS_REQUEST_CODE)
+        }
         browseGoogle.setOnClickListener {
             startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), PICK_IMAGE_CODE)
         }
