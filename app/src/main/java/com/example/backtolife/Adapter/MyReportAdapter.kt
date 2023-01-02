@@ -19,6 +19,7 @@ import com.example.backtolife.R
 import com.example.backtolife.fragments.DEPRESSEDMOOD
 import com.example.backtolife.fragments.IDREPORT
 import com.example.backtolife.models.Report
+import com.google.android.material.chip.Chip
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,12 +51,19 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
 
         val dateReport = reports[position].date
         val moodReport = reports[position].mood
+        val chipDe = reports[position].depressedMood
+        val chipEl = reports[position].elevatedMood
+        val chipIr = reports[position].irritabilityMood
+        val chipPs = reports[position].symptoms
 
 
         val psyReport = reports[position].symptoms
         holder.date.text = dateReport
         holder.mood.text = moodReport
-        holder.psychotic.text = psyReport
+        holder.chipDepressed.text = "Depression $chipDe%"
+        holder.chipElevation.text = "Elevation $chipEl%"
+        holder.chipIrritability.text = "Irritability $chipIr%"
+        holder.chipPsychotic.text = "Psychotic $chipPs"
 
         when (moodReport) {
             "Happy" -> holder.imagee.setImageResource(R.drawable.happyy)
@@ -66,21 +74,12 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
         }
 
 
-        val seekDepressed = reports[position].depressedMood
-        holder.depressedMood.progress = seekDepressed
-        holder.depressedMood.isEnabled = false
-        holder.depressedText.text = "$seekDepressed"
 
 
-        val seekElevation = reports[position].elevatedMood
-        holder.elevatedMood.progress = seekElevation
-        holder.elevatedMood.isEnabled = false
-        holder.elevationText.text = "$seekElevation"
 
-        val seekIrritbility = reports[position].irritabilityMood
-        holder.irritabilityMood.progress = seekIrritbility
-        holder.irritabilityMood.isEnabled = false
-        holder.irritabilityText.text = "$seekIrritbility"
+
+
+
 
 
 
@@ -95,23 +94,20 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
 
         val date = itemView.findViewById<TextView>(R.id.dateReport)
         val mood = itemView.findViewById<TextView>(R.id.tvMoodReport)
-        val psychotic = itemView.findViewById<TextView>(R.id.psychotic)
-        val depressedMood = itemView.findViewById<SeekBar>(R.id.sb1)
-        val elevatedMood = itemView.findViewById<SeekBar>(R.id.sb2)
-        val irritabilityMood = itemView.findViewById<SeekBar>(R.id.sb3)
-        val depressedText = itemView.findViewById<TextView>(R.id.depressedText)
-        val elevationText = itemView.findViewById<TextView>(R.id.elevationText)
-        val irritabilityText = itemView.findViewById<TextView>(R.id.irritabilityText)
+        val chipDepressed = itemView.findViewById<Chip>(R.id.chip_1)
+        val chipElevation = itemView.findViewById<Chip>(R.id.chip_2)
+        val chipIrritability = itemView.findViewById<Chip>(R.id.chip_3)
+        val chipPsychotic = itemView.findViewById<Chip>(R.id.chip_4)
 
 
         val imagee = itemView.findViewById<ImageView>(R.id.title_image_report)
-        val editReportImage =
+        /*val editReportImage =
             itemView.findViewById<ImageView>(R.id.menuEditReport).setOnClickListener {
                 popupMenus(it)
-            }
+            }*/
 
 
-        private fun popupMenus(v: View) {
+        /* private fun popupMenus(v: View) {
             val position = reports[adapterPosition]
             val popupMenus = PopupMenu(mContext, v)
             popupMenus.inflate(R.menu.edit_menu)
@@ -119,7 +115,7 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
                 if (it.itemId == R.id.editReport) {
                     val v = LayoutInflater.from(mContext).inflate(R.layout.edit_item,null)
                     val dateEdit = v.findViewById<TextView>(R.id.textViewSelectedDateEdit)
-                        dateEdit.text = position.date
+                    dateEdit.text = position.date
                     //mood
                     val moodHappyEdit = v.findViewById<TextView>(R.id.textViewHappyEdit)
                     val moodCalmEdit = v.findViewById<TextView>(R.id.textViewCalmEdit)
@@ -172,7 +168,7 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
 
                         }
                     }
-                     var id = position._id
+                    var id = position._id
                     AlertDialog.Builder(mContext)
                         .setView(v)
                         .setPositiveButton("Ok"){
@@ -209,43 +205,44 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
                         .show()
                     true
                 }
-                  else true
+                else true
 
-                }
+            }
             popupMenus.show()
             val popup = PopupMenu::class.java.getDeclaredField("mPopup")
             popup.isAccessible = true
             val menu = popup.get(popupMenus)
             menu.javaClass.getDeclaredMethod("setForceShowIcon",Boolean::class.java)
                 .invoke(menu,true)
-            }
+        }*/
 
 
     }
 
-        fun deleteItem(index: Int) {
+    fun deleteItem(index: Int) {
 
-            com.example.backtolife.fragments.apiInterface.deleteReport(reports.removeAt(index)._id)
-                .enqueue(object: Callback<Report> {
-                    override fun onResponse(call: Call<Report>, response: Response<Report>)
-                    {
-                        if (response.isSuccessful){
-                            Log.i("Report Deleted", response.body().toString())
-                        }
+        com.example.backtolife.fragments.apiInterface.deleteReport(reports.removeAt(index)._id)
+            .enqueue(object: Callback<Report> {
+                override fun onResponse(call: Call<Report>, response: Response<Report>)
+                {
+                    if (response.isSuccessful){
+                        Log.i("Report Deleted", response.body().toString())
                     }
+                }
 
-                    override fun onFailure(call: Call<Report>, t: Throwable)
-                    {
-                        println("okay")
-                    }
-                })
-            notifyDataSetChanged()
-        }
+                override fun onFailure(call: Call<Report>, t: Throwable)
+                {
+                    println("okay")
+                }
+            })
+        notifyDataSetChanged()
+    }
+    }
 
 
 
 
-}
+
 
 
 

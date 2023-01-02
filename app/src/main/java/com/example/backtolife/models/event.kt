@@ -3,7 +3,7 @@ package com.example.backtolife.models
 import android.os.Parcel
 import android.os.Parcelable
 
-data class event(val nom:String, val time:String, val doctorName:String, val img:Int):Parcelable {
+data class event(val nomm:String, val time:String, val doctorName:String, val imagee:Int):Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
@@ -13,10 +13,10 @@ data class event(val nom:String, val time:String, val doctorName:String, val img
 
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(nom)
+        parcel.writeString(nomm)
         parcel.writeString(time)
         parcel.writeString(doctorName)
-        parcel.writeInt(img)
+        parcel.writeInt(imagee )
     }
     override fun describeContents(): Int {
         return 0

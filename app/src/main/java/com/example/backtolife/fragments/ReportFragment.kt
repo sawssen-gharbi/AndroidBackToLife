@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.bundleOf
+import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.ItemTouchHelper
 
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import com.example.backtolife.API.UserApi
 import com.example.backtolife.Adapter.MyReportAdapter
 
 import com.example.backtolife.models.Report
+import com.example.backtolife.models.SwipeToDeleteCallBack
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,6 +58,7 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
 
                     if (response.isSuccessful) {
                         recyclerView = rootview.findViewById(R.id.recycleViewReport)
+
                         adapter = MyReportAdapter(response.body()!! as MutableList<Report>)
 
 
@@ -73,7 +76,7 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
                                 builder.setTitle("Delete Item")
                                 builder.setMessage("Are you sure you want to delete item")
                                 builder.setPositiveButton("Confirm") { dialog, which ->
-                                adapter.deleteItem(viewHolder.adapterPosition)
+                                    adapter.deleteItem(viewHolder.adapterPosition)
                                 }
 
                                 builder.setNegativeButton("Cancel") { dialog, which ->
@@ -105,48 +108,49 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
 
 
 
-   /* private fun dataInitial(){
-        reportArrayList = arrayListOf<Reports>()
-        imageId = arrayOf(
-            R.drawable.angryy,
-            R.drawable.happyy
 
-        )
+/* private fun dataInitial(){
+     reportArrayList = arrayListOf<Reports>()
+     imageId = arrayOf(
+         R.drawable.angryy,
+         R.drawable.happyy
 
-        mood = arrayOf(
-            getString(R.string.angry),
-            getString(R.string.happy)
-        )
-        date = arrayOf(
-            getString(R.string.date),
-            getString(R.string.date)
-        )
-        depressedPourcentage = arrayOf(
-            getString(R.string.depressed),
-            getString(R.string.depressed)
-        )
-        elevatedPourcentage = arrayOf(
-            getString(R.string.elevated),
-            getString(R.string.elevated)
+     )
 
-        )
-        irritabilityPourcentage = arrayOf(
-            getString(R.string.irritability),
-            getString(R.string.irritability)
-        )
-        psychoticSymptoms = arrayOf(
-            getString(R.string.psychotic),
-            getString(R.string.psychotic)
-        )
+     mood = arrayOf(
+         getString(R.string.angry),
+         getString(R.string.happy)
+     )
+     date = arrayOf(
+         getString(R.string.date),
+         getString(R.string.date)
+     )
+     depressedPourcentage = arrayOf(
+         getString(R.string.depressed),
+         getString(R.string.depressed)
+     )
+     elevatedPourcentage = arrayOf(
+         getString(R.string.elevated),
+         getString(R.string.elevated)
+
+     )
+     irritabilityPourcentage = arrayOf(
+         getString(R.string.irritability),
+         getString(R.string.irritability)
+     )
+     psychoticSymptoms = arrayOf(
+         getString(R.string.psychotic),
+         getString(R.string.psychotic)
+     )
 
 
-        for ( i in imageId.indices){
+     for ( i in imageId.indices){
 
-            val  reports = Reports(imageId[i], mood[i],date[i],depressedPourcentage[i],
-                elevatedPourcentage[i],irritabilityPourcentage[i],psychoticSymptoms[i])
+         val  reports = Reports(imageId[i], mood[i],date[i],depressedPourcentage[i],
+             elevatedPourcentage[i],irritabilityPourcentage[i],psychoticSymptoms[i])
 
-            reportArrayList.add(reports)
-        }*/
+         reportArrayList.add(reports)
+     }*/
 
 
 

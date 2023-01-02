@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="orange"> #f8c6c7</color>
+    <color name="blue">#74C5E1</color>
+    <color name="special">#F8FDFF</color>
+    <color name="Underlined">#D8D6D6</color>
+    <color name="beige">#eef3dd</color>
+    <color name="lili">#A4CABC</color>
+    <color name="lila">#D6C6B9 </color>
+    <color name="light_medium_gray"> #f3f3f3</color>
+    <color name="colorPrimary">#375de4</color>
+    <color name="colorPrimaryDark">#375de4</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="smokyWhite">#fafafa</color>
+    <color name="lightText">#c9d3f7</color>
+    <color name="hintColor">#b7c1e4</color>
+    <color name="searchBarColor">#0023a1</color>
+    <color name="greenBtnColor">#48ceb9</color>
+    <color name="lightBlue">#e6f2ff</color>
+    <color name="textBlue">#268eff</color>
+    <color name="deepBlue">#425186</color>
+    <color name="back">#f18c8e</color>
+    <color name="pink"> #f18c8e</color>
+    <color name="darkpink"> #bb7f87</color>
+    <color name="newpink">#fce4e4</color>
+    <color name="newwhite">#efeaea</color>
+    <color name="green_505">#558AA771</color>
+    <color name="green_700">#FF60794a</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="transparent">#00000000</color>
+    <color name="orange_500">#FFFF9F9E</color>
+
+
+
+
+
+
+
+
+</resources>

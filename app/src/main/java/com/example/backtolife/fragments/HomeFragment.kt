@@ -1,30 +1,45 @@
 package com.example.backtolife.fragments
 
-import android.app.DatePickerDialog
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.airbnb.lottie.LottieAnimationView
 import com.example.backtolife.*
 import com.example.backtolife.API.UserApi
 import com.example.backtolife.models.ReportResponse
+import com.example.studentchat.Interface.RealPathUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.slider.Slider
 import com.harrywhewell.scrolldatepicker.DayScrollDatePicker
+import kotlinx.android.synthetic.main.activity_resetpassword.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
+import java.text.DateFormat
+import java.time.LocalDate
+import java.time.LocalDate.now
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -36,13 +51,20 @@ const val IRRITABILITYMOOD = "IRRITABILITYMOOD"
 const val SYMPTOMS = "SYMPTOMS"
 const val IDREPORT = "IDREPORT"
 
+val map: HashMap<String, String> = HashMap()
+
+private lateinit var mSharedPref: SharedPreferences
+
+
+
+
+
 class HomeFragment : Fragment() , View.OnClickListener  {
 
 
-    private lateinit var mSharedPref: SharedPreferences
 
     lateinit var dayDatePicker : DayScrollDatePicker
-    lateinit var SelectedDate : String
+    private var SelectedDate : Date = Date()
 
     private lateinit var btnAdd: Button
     private lateinit var btnSignOut: Button
@@ -63,13 +85,17 @@ class HomeFragment : Fragment() , View.OnClickListener  {
     private lateinit var textPourEl : TextView
     private lateinit var textPourIrr : TextView
 
-    private lateinit var sDepressed: SeekBar
-    private lateinit var sElevated: SeekBar
-    private lateinit var sIrritability: SeekBar
+    private lateinit var sDepressed: Slider
+    private lateinit var sElevated: Slider
+    private lateinit var sIrritability: Slider
 
 
     private lateinit var btnPSNo: Button
     private lateinit var btnPSYes: Button
+
+
+    private lateinit var drawerlayout: DrawerLayout
+    private lateinit var navigationview: NavigationView
 
 
 
@@ -78,8 +104,13 @@ class HomeFragment : Fragment() , View.OnClickListener  {
     var startPoint = 0
     var endPoint = 0
 
-    val map: HashMap<String, String> = HashMap()
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMS_REQUEST_CODE ->if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {mSharedPref.edit().putBoolean(IS_GRANTED_READ_IMAGES, true).apply()}
+            else { super.onRequestPermissionsResult(requestCode, permissions, grantResults)}
+        }
+    }
 
 
     override fun onCreateView(
@@ -92,6 +123,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
 
         // Inflate the layout for this fragment
         refresh(context)
+
         return   inflater.inflate(R.layout.fragment_home, container, false)
 
 
@@ -99,9 +131,11 @@ class HomeFragment : Fragment() , View.OnClickListener  {
     }
 
 
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-            val apiInterface = UserApi.create()
+
+        val apiInterface = UserApi.create()
 
 
         mSharedPref =
@@ -109,6 +143,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
         val textName = mSharedPref.getString(FULLNAME, "").toString()
         textViewName = view.findViewById(R.id.textViewName)
         textViewName.text = textName
+
 
         btnAdd = view.findViewById(R.id.buttonAdd)
 
@@ -130,8 +165,114 @@ class HomeFragment : Fragment() , View.OnClickListener  {
         textSad = view.findViewById(R.id.textViewSad)
 
         sDepressed = view.findViewById(R.id.sliderDepressed)
+        sDepressed.setLabelFormatter { value: Float ->
+            when (value) {
+                0.0f -> {
+                    return@setLabelFormatter "None"
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                20.0f -> {
+                    return@setLabelFormatter "Low"
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                40.0f -> {
+                    return@setLabelFormatter "Mild"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                60.0f -> {
+                    return@setLabelFormatter "Moderate"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                80.0f -> {
+                    return@setLabelFormatter "Severe"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+
+                else -> {
+                    return@setLabelFormatter "Critical"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+            }
+        }
+
+
+
+
+
         sElevated = view.findViewById(R.id.sliderElevated)
+
+        sElevated.setLabelFormatter { value: Float ->
+            when (value) {
+                0.0f -> {
+                    return@setLabelFormatter "None"
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                20.0f -> {
+                    return@setLabelFormatter "Low"
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                40.0f -> {
+                    return@setLabelFormatter "Mild"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                60.0f -> {
+                    return@setLabelFormatter "Moderate"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                80.0f -> {
+                    return@setLabelFormatter "Severe"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+
+                else -> {
+                    return@setLabelFormatter "Critical"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+            }
+        }
         sIrritability = view.findViewById(R.id.sliderIrritability)
+
+        sIrritability.setLabelFormatter { value: Float ->
+            when (value) {
+                0.0f -> {
+                    return@setLabelFormatter "None"
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                20.0f -> {
+                    return@setLabelFormatter "Low"
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                40.0f -> {
+                    return@setLabelFormatter "Mild"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                60.0f -> {
+                    return@setLabelFormatter "Moderate"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+                80.0f -> {
+                    return@setLabelFormatter "Severe"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+
+                else -> {
+                    return@setLabelFormatter "Critical"
+
+                    return@setLabelFormatter String.format(Locale.US, "%.0f", value);
+                }
+            }
+        }
 
         textPourDep = view.findViewById(R.id.textViewPourDep)
         textPourEl = view.findViewById(R.id.textViewPourEl)
@@ -140,8 +281,8 @@ class HomeFragment : Fragment() , View.OnClickListener  {
         btnPSNo = view.findViewById(R.id.btnPsychoticSymptomsNo)
         btnPSYes = view.findViewById(R.id.PsychoticSymptomsYes)
 
-       // btnSignOut = view.findViewById(R.id.buttonSignOut)
-         dayDatePicker = view.findViewById(R.id.dayDatePicker)
+        // btnSignOut = view.findViewById(R.id.buttonSignOut)
+        dayDatePicker = view.findViewById(R.id.dayDatePicker)
 
         //Google Sign In
 
@@ -156,6 +297,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
 
         }
 
+
         fun signOut() {
             gsc.signOut().addOnCompleteListener {
                 activity?.finish()
@@ -165,180 +307,182 @@ class HomeFragment : Fragment() , View.OnClickListener  {
         }
 
         // btnSignOut.setOnClickListener {
-            //  signOut()
-            //  }
+        //  signOut()
+        //  }
 
-            //Date Picker
-   // val calender = Calendar.getInstance()
+        //Date Picker
+        // val calender = Calendar.getInstance()
 
-   // fun updateTable(c: Calendar) {
-            // val mf = "dd-MM-yyyy"
-            // val sdf = SimpleDateFormat(mf, Locale.FRANCE)
-            //textSelectedDate.setText(sdf.format(c.time))
+        // fun updateTable(c: Calendar) {
+        // val mf = "dd-MM-yyyy"
+        // val sdf = SimpleDateFormat(mf, Locale.FRANCE)
+        //textSelectedDate.setText(sdf.format(c.time))
 
-            //}
+        //}
 
-   // val datepicker = DatePickerDialog.OnDateSetListener { view, year, month, day ->
-    //calender.set(Calendar.YEAR, year)
-    //calender.set(Calendar.MONTH, month)
-    //calender.set(Calendar.DAY_OF_MONTH, day)
+        // val datepicker = DatePickerDialog.OnDateSetListener { view, year, month, day ->
+        //calender.set(Calendar.YEAR, year)
+        //calender.set(Calendar.MONTH, month)
+        //calender.set(Calendar.DAY_OF_MONTH, day)
 
-    // updateTable(calender)
+        // updateTable(calender)
 
-    // }
+        // }
 
 
-    dayDatePicker.setStartDate(1, 11, 2022)
-    dayDatePicker.getSelectedDate {
+        dayDatePicker.getSelectedDate {
 
-    SelectedDate = it.toString()
-    Toast.makeText(context, SelectedDate, Toast.LENGTH_SHORT).show()
-}
-
-            //OnClick Method
-            imageHappy.setOnClickListener(this)
-            imageCalm.setOnClickListener(this)
-            imageManic.setOnClickListener(this)
-            imageAngry.setOnClickListener(this)
-            imageSad.setOnClickListener(this)
-            btnPSYes.setOnClickListener(this)
-            btnPSNo.setOnClickListener(this)
+            if (it != null) {
+                SelectedDate = it
+            }
+            Toast.makeText(context, SelectedDate.toString(), Toast.LENGTH_SHORT).show()
+            Log.e("date",DateFormat.getDateInstance().format(SelectedDate))
+        }
 
 
 
-
-        sDepressed.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-               override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                   textPourDep.text = p1.toString()
-               }
-
-               override fun onStartTrackingTouch(p0: SeekBar?) {
-                   if (p0 != null) {
-                       startPoint = p0.progress
-                   }
-               }
-
-               override fun onStopTrackingTouch(p0: SeekBar?) {
-                   if (p0 != null) {
-                       endPoint = p0.progress
-                   }
-
-               }
+        //OnClick Method
+        imageHappy.setOnClickListener(this)
+        imageCalm.setOnClickListener(this)
+        imageManic.setOnClickListener(this)
+        imageAngry.setOnClickListener(this)
+        imageSad.setOnClickListener(this)
+        btnPSYes.setOnClickListener(this)
+        btnPSNo.setOnClickListener(this)
 
 
-           })
 
-           sElevated.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-               override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                   textPourEl.text = p1.toString()
-               }
+        sDepressed.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+                startPoint = slider.value.toInt()
+            }
 
-               override fun onStartTrackingTouch(p0: SeekBar?) {
-                   if (p0 != null) {
-                       startPoint = p0.progress
-                   }
-               }
+            override fun onStopTrackingTouch(slider: Slider) {
+                if (slider != null) {
+                    endPoint = slider.value.toInt()
+                }
+            }
 
-               override fun onStopTrackingTouch(p0: SeekBar?) {
-                   if (p0 != null) {
-                       endPoint = p0.progress
-                   }
+        })
+        sDepressed.addOnChangeListener { slider, value, fromUser ->
+            textPourDep.text = value.toInt().toString()
+        }
 
-               }
+        sElevated.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+                startPoint = slider.value.toInt()
+            }
 
-
-           })
-
-           sIrritability.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-               override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                   textPourIrr.text = p1.toString()
-               }
-
-               override fun onStartTrackingTouch(p0: SeekBar?) {
-                   if (p0 != null) {
-                       startPoint = p0.progress
-                   }
-               }
-
-               override fun onStopTrackingTouch(p0: SeekBar?) {
-                   if (p0 != null) {
-                       endPoint = p0.progress
-                   }
-
-               }
+            override fun onStopTrackingTouch(slider: Slider) {
+                if (slider != null) {
+                    endPoint = slider.value.toInt()
+                }
+            }
+        })
+        sElevated.addOnChangeListener { slider, value, fromUser ->
+            textPourEl.text = value.toInt().toString()
+        }
 
 
-           })
+        sIrritability.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+                startPoint = slider.value.toInt()
+            }
 
+            override fun onStopTrackingTouch(slider: Slider) {
+                if (slider != null) {
+                    endPoint = slider.value.toInt()
+                }
+            }
+        })
+        sIrritability.addOnChangeListener { slider, value, fromUser ->
+            textPourIrr.text = value.toInt().toString()
+        }
 
-            btnAdd.setOnClickListener {
+        map["mood"] = textHappy.text.toString()
+        imageHappy.setImageResource(R.drawable.happy_outline)
+
+        btnAdd.setOnClickListener {
+            if (isValide()) {
 
 
                 map["user"] = mSharedPref.getString(ID, "")!!
-                map["date"] = SelectedDate.toString()
-                map["depressedMood"] = sDepressed.progress.toString()
-                map["elevatedMood"] = sElevated.progress.toString()
-                map["irritabilityMood"] = sIrritability.progress.toString()
+                map["date"] = DateFormat.getDateInstance().format(SelectedDate).toString()
+                map["depressedMood"] = sDepressed.value.toString()
+                map["elevatedMood"] = sElevated.value.toString()
+                map["irritabilityMood"] = sIrritability.value.toString()
 
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    apiInterface.addReport(map,mSharedPref.getString(ID, "").toString()).enqueue(object : Callback<ReportResponse> {
-                        override fun onResponse(
-                            call: Call<ReportResponse>, response:
-                            Response<ReportResponse>
-                        ) {
-                            val report = response.body()
-                                            Log.e("iduser",map["user"].toString())
-                                            Log.e("success: ", report.toString())
-                                            if (report != null) {
-                                                mSharedPref.edit().apply {
-                                                    putString(IDREPORT,report.report._id)
-                                                    putString(DATE, report.report.date)
-                                                    putString(MOOD, report.report.mood)
-                                                    putString(DEPRESSEDMOOD, report.report.depressedMood.toString())
-                                                    putString(ELEVATEDMOOD, report.report.elevatedMood.toString())
-                                                    putString(
-                                                        IRRITABILITYMOOD,
-                                                        report.report.irritabilityMood.toString()
-                                                    )
+                    apiInterface.addReport(map, mSharedPref.getString(ID, "").toString())
+                        .enqueue(object : Callback<ReportResponse> {
+                            override fun onResponse(
+                                call: Call<ReportResponse>, response:
+                                Response<ReportResponse>
+                            ) {
+                                val report = response.body()
+                                Log.e("iduser", map["user"].toString())
+                                Log.e("success: ", report.toString())
+                                if (report != null) {
+                                    mSharedPref.edit().apply {
+                                        putString(IDREPORT, report.report._id)
+                                        putString(DATE, report.report.date)
+                                        putString(MOOD, report.report.mood)
+                                        putString(
+                                            DEPRESSEDMOOD,
+                                            report.report.depressedMood.toString()
+                                        )
+                                        putString(
+                                            ELEVATEDMOOD,
+                                            report.report.elevatedMood.toString()
+                                        )
+                                        putString(
+                                            IRRITABILITYMOOD,
+                                            report.report.irritabilityMood.toString()
+                                        )
 
-                                                }.apply()
+                                    }.apply()
 
 
-                                            }
-                                        }
+                                }
+                            }
 
 
-                                        override fun onFailure(call: Call<ReportResponse>, t: Throwable) {
-                                            println("messin")
-                                        }
-                                    })
-                    }
+                            override fun onFailure(call: Call<ReportResponse>, t: Throwable) {
+                                println("messin")
+                            }
+                        })
                 }
-
-
-
-
-
-            super.onViewCreated(view, savedInstanceState)
+            }
         }
+
+
+
+
+
+
+
+        super.onViewCreated(view, savedInstanceState)
+
+
+    }
 
     override fun onClick(p0: View?) {
 
         if (p0 != null) {
             when(p0.id){
 
-                 R.id.imageViewHappy  ->  {
+                R.id.imageViewHappy  ->  {
 
-                   map["mood"] = textHappy.text.toString()
-                     Toast.makeText(context,"Your choice is " + map["mood"],Toast.LENGTH_SHORT).show()
+                    map["mood"] = textHappy.text.toString()
+                    Toast.makeText(context,"Your choice is " + map["mood"],Toast.LENGTH_SHORT).show()
                     imageHappy.setImageResource(R.drawable.happy_outline)
-                     imageCalm.setImageResource(R.drawable.yin_yang_symbol)
-                     imageManic.setImageResource(R.drawable.celtic)
-                     imageAngry.setImageResource(R.drawable.angryy)
-                     imageSad.setImageResource(R.drawable.sadd)
+                    imageCalm.setImageResource(R.drawable.yin_yang_symbol)
+                    imageManic.setImageResource(R.drawable.celtic)
+                    imageAngry.setImageResource(R.drawable.angryy)
+                    imageSad.setImageResource(R.drawable.sadd)
 
-                 }
+                }
                 R.id.imageViewCalm ->  {
 
                     map["mood"] = textCalm.text.toString()
@@ -355,7 +499,7 @@ class HomeFragment : Fragment() , View.OnClickListener  {
                     Toast.makeText(context,"Your choice is " + map["mood"],Toast.LENGTH_SHORT).show()
                     imageHappy.setImageResource(R.drawable.happyy)
                     imageCalm.setImageResource(R.drawable.yin_yang_symbol)
-                    imageManic.setImageResource(R.drawable.cetlic_outline)
+                    imageManic.setImageResource(R.drawable.celtic_outline)
                     imageAngry.setImageResource(R.drawable.angryy)
                     imageSad.setImageResource(R.drawable.sadd)
                 }
@@ -381,40 +525,53 @@ class HomeFragment : Fragment() , View.OnClickListener  {
                 }
                 R.id.PsychoticSymptomsYes -> {
                     map["symptoms"] = btnPSYes.text.toString()
-                    Toast.makeText(context,"Your choice is " + map["symptoms"],Toast.LENGTH_SHORT).show()
+                    btnPSYes.setTextColor(Color.BLACK)
+                    btnPSNo.setTextColor(Color.WHITE)
                 }
                 R.id.btnPsychoticSymptomsNo -> {
                     map["symptoms"] = btnPSNo.text.toString()
-                    Toast.makeText(context,"Your choice is " + map["symptoms"],Toast.LENGTH_SHORT).show()
+                    btnPSNo.setTextColor(Color.BLACK)
+                    btnPSYes.setTextColor(Color.WHITE)
+
+
                 }
 
 
             }
         }
     }
+
+    private fun isValide(): Boolean {
+        if(SelectedDate.equals(null)){
+            Log.e("null","null")
+        }
+        return true
+    }
 }
 
 
-    fun refresh(context: Context?) {
-        context?.let {
-            val fragementManager = (context as? AppCompatActivity)?.supportFragmentManager
-            fragementManager?.let {
-                val currentFragement = fragementManager.findFragmentById(R.id.itemHome)
-                currentFragement?.let {
-                    val fragmentTransaction = fragementManager.beginTransaction()
-                    fragmentTransaction.detach(it)
-                    fragmentTransaction.attach(it)
-                    fragmentTransaction.commit()
-                }
+
+
+
+fun refresh(context: Context?) {
+    context?.let {
+        val fragementManager = (context as? AppCompatActivity)?.supportFragmentManager
+        fragementManager?.let {
+            val currentFragement = fragementManager.findFragmentById(R.id.itemHome)
+            currentFragement?.let {
+                val fragmentTransaction = fragementManager.beginTransaction()
+                fragmentTransaction.detach(it)
+                fragmentTransaction.attach(it)
+                fragmentTransaction.commit()
             }
         }
     }
-
-
-
-fun isValide(): Boolean {
-    return true
 }
+
+
+
+
+
 
 
 

@@ -1,7 +1,13 @@
 package com.example.backtolife
 
+import android.app.Activity
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import com.example.backtolife.fragments.HomeFragment
 
@@ -9,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 lateinit var bottomNav : BottomNavigationView
 
+@Suppress("DEPRECATION")
 class MainDoctor : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,5 +44,6 @@ class MainDoctor : AppCompatActivity() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
 
 }

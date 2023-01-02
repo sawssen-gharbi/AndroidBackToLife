@@ -3,7 +3,7 @@ package com.example.backtolife.models
 import android.os.Parcel
 import android.os.Parcelable
 
-class doctor(val img: Int, val date:String, val capacity:String, val title: String):Parcelable {
+class doctor(val img: Int, val date:String, val capacity:String, val titre: String):Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString()!!,
@@ -16,7 +16,7 @@ class doctor(val img: Int, val date:String, val capacity:String, val title: Stri
         parcel.writeInt(img)
         parcel.writeString(date)
         parcel.writeString(capacity)
-        parcel.writeString(title)
+        parcel.writeString(titre)
     }
 
     override fun describeContents(): Int {

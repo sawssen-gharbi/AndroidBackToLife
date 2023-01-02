@@ -19,10 +19,7 @@ class listPatient(val listpatient:ArrayList<patient>):RecyclerView.Adapter<listP
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val patient: patient =listpatient[position]
-        holder.nom.text=patient.nom
 
-        holder.titre.text=patient.titre;
-        holder.image.setImageResource(patient.image);
         holder.itemView.setOnClickListener{
             onItemOnClick?.invoke(patient)
         }
@@ -36,7 +33,7 @@ class listPatient(val listpatient:ArrayList<patient>):RecyclerView.Adapter<listP
     class ViewHolder(view:View):RecyclerView.ViewHolder(view) {
         val nom=view.findViewById<TextView>(R.id.name_user);
         val image=view.findViewById<CircleImageView>(R.id.img_user);
-        val titre=view.findViewById<TextView>(R.id.msg);
+
     }
 
 }

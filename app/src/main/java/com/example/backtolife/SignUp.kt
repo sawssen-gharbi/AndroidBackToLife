@@ -1,17 +1,21 @@
 package com.example.backtolife
 
+import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.backtolife.API.UserApi
 import com.example.backtolife.models.SignupResponse
+import com.example.studentchat.Interface.RealPathUtil
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -63,30 +67,36 @@ class SignUp : AppCompatActivity() {
 
 
     //Image
-    private  var path: String? =""
+    private var path: String? = ""
     private lateinit var image: ImageView
     private var multipartImage: MultipartBody.Part? = null
     private var imageU: Uri? = null
-    private  var body: MultipartBody.Part?= null
+    private var body: MultipartBody.Part? = null
     private var reqFile: RequestBody? = null
+
+    lateinit var call: Call<SignupResponse>
+    val apiInterface = UserApi.create()
+    val map: HashMap<String, RequestBody> = HashMap()
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(/* requestCode = */ requestCode, /* resultCode = */
             resultCode, /* data = */
-            data)
+            data
+        )
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_CODE) {
-            val rl=RealPathUtil()
+            val rl = RealPathUtil()
             val p: String? = data?.data?.let { this.let { it1 -> rl.getRealPath(it1, it) } }
-            if(!p.isNullOrEmpty()){
-                path=p;
+            if (!p.isNullOrEmpty()) {
+                path = p;
             }
             image.setImageURI(data?.data)
-            imageU= Uri.parse(data?.dataString!!)
+            imageU = Uri.parse(data?.dataString!!)
         }
 
 
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             PERMS_REQUEST_CODE ->if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {mSharedPref.edit().putBoolean(IS_GRANTED_READ_IMAGES, true).apply()}
@@ -96,6 +106,7 @@ class SignUp : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_signup)
@@ -123,17 +134,26 @@ class SignUp : AppCompatActivity() {
                 image.visibility = View.INVISIBLE
             }
         }
-
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),PERMS_REQUEST_CODE)
+        }
         browse.setOnClickListener {
-            startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), PICK_IMAGE_CODE)
+
+            startActivityForResult(
+                Intent(
+                    Intent.ACTION_PICK,
+                    MediaStore.Images.Media.INTERNAL_CONTENT_URI
+                ), PICK_IMAGE_CODE
+            )
+
+
         }
 
         btn.setOnClickListener {
             Register()
         }
 
-        log.setOnClickListener{
+        log.setOnClickListener {
             val intent = Intent(this@SignUp, Login::class.java)
             startActivity(intent)
         }
@@ -141,43 +161,42 @@ class SignUp : AppCompatActivity() {
 
 
 
+
     private fun Register() {
         var rolee = "patient"
         if (isValide()) {
 
-
-            val apiInterface = UserApi.create()
-            val map: HashMap<String, RequestBody> = HashMap()
-
-            //image
-            val f=File(path)
-
-
-            map["fullName"] = fullname.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-            map["email"] = email.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-            map["password"] = password.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-            if(role.isChecked) {
-                if (f != null) {
-                    Log.e("file", reqFile.toString())
-
-                    reqFile = f.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                    body = MultipartBody.Part.createFormData("certificate", f.name, reqFile!!)
+            if (path.isNullOrEmpty()) {
+                path = "empty"
+                map["fullName"] = fullname.editText?.text.toString().trim()
+                    .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                map["email"] = email.editText?.text.toString().trim()
+                    .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                map["password"] = password.editText?.text.toString().trim()
+                    .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                map["role"] = rolee.trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                call = apiInterface.signupPatient(map);
+            } else {
+                if (role.isChecked) {
+                    val f = File(path)
+                    map["fullName"] = fullname.editText?.text.toString().trim()
+                        .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    map["email"] = email.editText?.text.toString().trim()
+                        .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    map["password"] = password.editText?.text.toString().trim()
+                        .toRequestBody("multipart/form-data".toMediaTypeOrNull())
                     map["role"] = role.text.toString().trim()
                         .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    reqFile = f.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                    body = MultipartBody.Part.createFormData("certificate", f.name, reqFile!!)
+                    call = apiInterface.signupDoctor(map, body!!);
                 } else {
-                    map["role"] =
-                        rolee.trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-
-                    //reqFile = f.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                    //body = MultipartBody.Part.createFormData("certificate", "", reqFile!!)
-
+                    Log.e("Erreur here", "erreur")
                 }
             }
 
-
-
             CoroutineScope(Dispatchers.IO).launch {
-                apiInterface.signup(map, body!!).enqueue(object : Callback<SignupResponse> {
+                call.enqueue(object : Callback<SignupResponse> {
                     override fun onResponse(
                         call: Call<SignupResponse>, response:
                         Response<SignupResponse>
@@ -185,14 +204,14 @@ class SignUp : AppCompatActivity() {
 
                         val user = response.body()
                         Log.e("success: ", user.toString())
-                        if (user != null  ) {
+                        if (user != null) {
                             mSharedPref.edit().apply {
                                 putString(ID, user.user._id)
                                 putString(ROLE, user.user.role)
                                 putString(PASSWORD, user.user.password)
                                 putString(EMAIL, user.user.email)
                                 putString(FULLNAME, user.user.fullName)
-                                putString(CERTIFICATE,user.user.certificate)
+                                putString(CERTIFICATE, user.user.certificate)
                             }.apply()
 
                             intent = Intent(this@SignUp, Login::class.java)
@@ -219,10 +238,40 @@ class SignUp : AppCompatActivity() {
 
 
     }
-}
 
 
-fun isValide(): Boolean {
-    return true
-}
+
+    private fun isValide(): Boolean {
+
+        if ((fullname.editText?.text.toString()).isEmpty()) {
+            fullname.error = "Fullname Can't Be Empty"
+            return false
+        } else {
+            fullname.error = null
+            }
+            if ((email.editText?.text.toString()).isEmpty()) {
+                email.error = "Email Can't Be Empty"
+                return false
+            }else {
+                email.error = null
+            }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email.editText?.text.toString()).matches()) {
+                email.error = "Invalid Email Address"
+                return false
+            }else {
+                email.error = null
+            }
+
+            if ((password.editText?.text.toString()).isEmpty()) {
+                password.error = "Password Can't Be Empty"
+                return false
+            }else {
+                password.error = null
+            }
+
+            return true
+        }
+    }
+
+
 

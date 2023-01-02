@@ -1,201 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="175dp"
-    app:cardBackgroundColor="@color/light_medium_gray"
+    app:cardBackgroundColor="@color/newpink"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="20dp"
     android:layout_marginHorizontal="10dp"
-    android:layout_marginVertical="16dp"
-    app:cardElevation="4dp">
+    android:layout_marginVertical="16dp">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:orientation="horizontal">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/title_image_report"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:src="@drawable/angryy"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp" />
-
 
     <TextView
         android:id="@+id/tvMoodReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="110dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:drawableTint="@color/pink"
         android:drawableLeft="@drawable/ic_baseline_local_florist_24"
-
         android:text="Mood"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintStart_toEndOf="@+id/title_image_report" />
 
+</LinearLayout>
 
     <TextView
         android:id="@+id/dateReport"
-        android:layout_width="wrap_content"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="10dp"
+        android:drawableTint="@color/pink"
         android:drawableLeft="@drawable/ic_baseline_calendar_today_24"
         android:text="The Date :"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toEndOf="@+id/title_image_report" />
 
-
-
-    <RadioGroup
+<com.google.android.material.chip.ChipGroup
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="70dp"
+    >
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_1"
         android:layout_width="wrap_content"
-        android:layout_height="126dp"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="38dp"
-        android:background="@drawable/background_border"
-        android:padding="5dp"
-        android:paddingBottom="10dp">
+        android:layout_height="wrap_content"
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        android:text="Depression"
+        app:chipBackgroundColor ="@color/light_medium_gray"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:chipIcon="@drawable/ic_baseline_self_improvement_24"
+        app:chipIconTint="@color/pink" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:text="Elevation"
+        app:chipBackgroundColor="@color/light_medium_gray"
+        app:chipIcon="@drawable/ic_baseline_psychology_24"
+        app:chipIconTint="@color/pink" />
+</com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.chip.ChipGroup
+    android:layout_marginTop="120dp"
+    android:layout_marginLeft="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipIconTint="@color/pink"
+            app:chipBackgroundColor ="@color/light_medium_gray"
+            app:chipIcon="@drawable/ic_person"
+            android:text="Irritability"/>
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:chipIconTint="@color/pink"
+        app:chipBackgroundColor ="@color/light_medium_gray"
+        app:chipIcon="@drawable/ic_baseline_favorite_24"
+        android:text="Symptoms"/>
+</com.google.android.material.chip.ChipGroup>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+</com.google.android.material.card.MaterialCardView>
 
-                <LinearLayout
-                    android:layout_width="220dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/reportDepressed"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Depression"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                    <TextView
-                        android:id="@+id/reportElevated"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Elevation"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                    <TextView
-                        android:id="@+id/reportIrritability"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Irritability"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                    <TextView
-                        android:id="@+id/reportPsychotic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Psychotic"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.5"
-                    android:orientation="vertical">
-
-                    <SeekBar
-                        android:id="@+id/sb1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <SeekBar
-                        android:id="@+id/sb2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <SeekBar
-                        android:id="@+id/sb3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <TextView
-                        android:id="@+id/psychotic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="No"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/depressedText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="%"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                    <TextView
-                        android:id="@+id/elevationText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="%"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                    <TextView
-                        android:id="@+id/irritabilityText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="%"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </LinearLayout>
-
-    </RadioGroup>
-
-    <ImageView
-        android:id="@+id/menuEditReport"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="300dp"
-        android:layout_marginTop="1dp"
-        app:srcCompat="@drawable/ic_baseline_more_horiz_24" />
-
-</androidx.cardview.widget.CardView>

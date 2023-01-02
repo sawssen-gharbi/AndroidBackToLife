@@ -22,8 +22,8 @@ class ListEvent(val listEvent:ArrayList<doctor>):RecyclerView.Adapter<ListEvent.
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val doctor: doctor =listEvent[position]
-        holder.title.text=doctor.title
-        holder.capacity.text=doctor.capacity;
+
+
         holder.date.text=doctor.date;
         holder.img.setImageResource(doctor.img);
         holder.itemView.setOnClickListener{
@@ -40,7 +40,7 @@ class ListEvent(val listEvent:ArrayList<doctor>):RecyclerView.Adapter<ListEvent.
         val title=view.findViewById<TextView>(R.id.name_user);
         val img=view.findViewById<CircleImageView>(R.id.img_user);
         val date=view.findViewById<TextView>(R.id.time);
-        val capacity=view.findViewById<TextView>(R.id.msg);
+
     }
 
 

@@ -11,17 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/frameLayoutGoogle"
-        android:layout_width="341dp"
-        android:layout_height="212dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/more_infos"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        <FrameLayout
+            android:id="@+id/frameLayoutGoogle"
+            android:layout_width="276dp"
+            android:layout_height="234dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/choose"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+        </FrameLayout>
 
 
         <RadioGroup
@@ -46,7 +46,7 @@
 
             <TextView
                 android:id="@+id/textViewUserGoogle"
-                android:layout_width="wrap_content"
+                android:layout_width="95dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:text="username"
@@ -57,7 +57,7 @@
                 android:id="@+id/textViewOurApp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="to our application"
+                android:text="to our app"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/black" />
         </RadioGroup>
@@ -77,11 +77,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewInfos" />
 
+
         <TextView
+            android:gravity="center"
             android:id="@+id/textViewInfos"
-            android:layout_width="314dp"
-            android:layout_height="107dp"
-            android:layout_marginTop="40dp"
+            android:layout_width="326dp"
+            android:layout_height="112dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/background_border"
             android:text="If you are a Patient just click NEXT \n \n If you are Doctor please check the box \n \n And put your certificat "
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -117,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="@color/pink"
                 android:text="Browse" />
         </RadioGroup>
 
@@ -140,13 +142,14 @@
             android:layout_height="48dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/blue"
+            android:background="@drawable/buttonbg"
+            app:backgroundTint="@null"
             android:text="NEXT"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/certificatGooglecertificatGoogle"
-            app:layout_constraintVertical_bias="0.677">
+            app:layout_constraintVertical_bias="1.0">
 
         </Button>
     </androidx.constraintlayout.widget.ConstraintLayout>

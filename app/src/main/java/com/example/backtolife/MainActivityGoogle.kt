@@ -1,9 +1,11 @@
 package com.example.backtolife
 
+import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,6 +14,7 @@ import android.view.View
 import android.widget.*
 import com.example.backtolife.API.UserApi
 import com.example.backtolife.models.User
+import com.example.studentchat.Interface.RealPathUtil
 
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -54,7 +57,7 @@ class MainActivityGoogle : AppCompatActivity() {
             resultCode, /* data = */
             data)
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_CODE) {
-            val rl=RealPathUtil()
+            val rl= RealPathUtil()
             val pG: String? = data?.data?.let { this.let { it1 -> rl.getRealPath(it1, it) } }
             if(!pG.isNullOrEmpty()){
                 pathG=pG;
@@ -100,7 +103,9 @@ class MainActivityGoogle : AppCompatActivity() {
             }
         }
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),PERMS_REQUEST_CODE)
+        }
         browseGoogle.setOnClickListener {
             startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), PICK_IMAGE_CODE)
         }
@@ -201,23 +206,23 @@ class MainActivityGoogle : AppCompatActivity() {
 
 
                                 } else {
-                                        finish()
-                                        val intent =
-                                            Intent(
-                                                this@MainActivityGoogle,
-                                                MainActivityPatient::class.java
-                                            )
-                                        startActivity(intent)
+                                    finish()
+                                    val intent =
+                                        Intent(
+                                            this@MainActivityGoogle,
+                                            MainActivityPatient::class.java
+                                        )
+                                    startActivity(intent)
 
-
-                                    }
-
-
-                                    var role = mSharedPref.getString(ROLE, "").toString()
-                                    Log.e("ROLE AFTER", role.toString())
 
                                 }
+
+
+                                var role = mSharedPref.getString(ROLE, "").toString()
+                                Log.e("ROLE AFTER", role.toString())
+
                             }
+                        }
 
 
 

@@ -16,8 +16,8 @@ class therapy : AppCompatActivity() {
             val textView =findViewById<TextView>(R.id.therapytitle)
             val imageView =findViewById<ImageView>(R.id.imagetherapy)
             textView1.text=event.doctorName
-            textView.text = event.nom
-            imageView.setImageResource(event.img)
+            textView.text = event.nomm
+            imageView.setImageResource(event.imagee)
 
 
         }
