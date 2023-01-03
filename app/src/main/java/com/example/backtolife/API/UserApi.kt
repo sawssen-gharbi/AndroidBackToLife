@@ -26,6 +26,11 @@ interface UserApi {
     fun editedLoginGoogle(@Path("id") id: String?, @PartMap map : HashMap<String, RequestBody>, @Part body: MultipartBody.Part?): Call<LoginGoogleResponse>
 
     @Multipart
+    @POST("user/editLoginFacebook/{id}")
+    fun editedLoginFacebook(@Path("id") id: String?, @PartMap map : HashMap<String, RequestBody>, @Part body: MultipartBody.Part?): Call<LoginFacebookResponse>
+
+
+    @Multipart
     @POST("user/signup")
     fun signupDoctor(@PartMap map : HashMap<String, RequestBody>, @Part body: MultipartBody.Part): Call<SignupResponse>
 
@@ -82,7 +87,7 @@ interface UserApi {
 
 
     companion object {
-        var BASE_URL = "http://192.168.1.116:7001/"
+        var BASE_URL = "http://192.168.100.155:7001/"
         fun create() : UserApi {
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())

@@ -36,26 +36,21 @@ import java.util.*
 
 
 @Suppress("DEPRECATION")
-class Login: AppCompatActivity() {
-
+class Login : AppCompatActivity() {
 
 
     val apiInterface = UserApi.create()
     val map: HashMap<String, String> = HashMap()
 
 
-    lateinit var imageFacebook : ImageView
-    lateinit var imageGoogle : ImageView
-    lateinit var email : TextInputLayout
-    lateinit var password : TextInputLayout
+    lateinit var imageFacebook: ImageView
+    lateinit var imageGoogle: ImageView
+    lateinit var email: TextInputLayout
+    lateinit var password: TextInputLayout
     private lateinit var mSharedPref: SharedPreferences
-    lateinit var callbackManager : CallbackManager
-    lateinit var accessToken : AccessToken
-    private var fpassword: TextView?=null
-
-
-
-
+    lateinit var callbackManager: CallbackManager
+    lateinit var accessToken: AccessToken
+    private var fpassword: TextView? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,10 +62,8 @@ class Login: AppCompatActivity() {
         email = findViewById(R.id.textInputLayoutEmail)
         password = findViewById(R.id.textInputLayoutPassword)
         imageGoogle = findViewById(R.id.imageViewGoogle)
-        imageFacebook =findViewById(R.id.imageViewFacebook)
-        fpassword=findViewById<TextView>(R.id.textViewForgetPassword)
-
-
+        imageFacebook = findViewById(R.id.imageViewFacebook)
+        fpassword = findViewById<TextView>(R.id.textViewForgetPassword)
 
 
         val button = findViewById<Button>(R.id.buttonLogin)
@@ -85,8 +78,8 @@ class Login: AppCompatActivity() {
             startActivity(intent)
         }
 
-        fpassword!!.setOnClickListener{
-            val mainIntent = Intent(this, forget_password ::class.java)
+        fpassword!!.setOnClickListener {
+            val mainIntent = Intent(this, forget_password::class.java)
             startActivity(mainIntent)
             fpassword!!.movementMethod = LinkMovementMethod.getInstance();
         }
@@ -106,7 +99,7 @@ class Login: AppCompatActivity() {
             startForResult.launch(signInIntent)
         }
 
-        imageGoogle.setOnClickListener{
+        imageGoogle.setOnClickListener {
             signIn()
 
         }
@@ -130,14 +123,14 @@ class Login: AppCompatActivity() {
                     if (!accessToken.isExpired && accessToken != null) {
                         val request = GraphRequest.newMeRequest(
                             accessToken,
-                            object : GraphRequest.GraphJSONObjectCallback{
+                            object : GraphRequest.GraphJSONObjectCallback {
                                 override fun onCompleted(
                                     obj: JSONObject?,
                                     response: GraphResponse?
                                 ) {
 
-                                    var fullnameFb : String = obj!!.getString("name")
-                                    var emailFb : String = obj!!.getString("email")
+                                    var fullnameFb: String = obj!!.getString("name")
+                                    var emailFb: String = obj!!.getString("email")
                                     map["email"] = emailFb
                                     map["fullName"] = fullnameFb
                                     map["role"] = String()
@@ -221,7 +214,6 @@ class Login: AppCompatActivity() {
                                     }
 
 
-
                                 }
                             })
                         val parameters = Bundle()
@@ -244,10 +236,11 @@ class Login: AppCompatActivity() {
 
 
 
-        imageFacebook.setOnClickListener{
+        imageFacebook.setOnClickListener {
 
 
-            LoginManager.getInstance().logInWithReadPermissions(this@Login, Arrays.asList("public_profile","email"));
+            LoginManager.getInstance()
+                .logInWithReadPermissions(this@Login, Arrays.asList("public_profile", "email"));
 
         }
 
@@ -260,21 +253,22 @@ class Login: AppCompatActivity() {
 
     }
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val intent = result.data
-            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
-            handleSignInResult(task)
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                val task: Task<GoogleSignInAccount> =
+                    GoogleSignIn.getSignedInAccountFromIntent(intent)
+                handleSignInResult(task)
 
+            }
         }
-    }
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
 
-            Log.e("account",account.toString())
+            Log.e("account", account.toString())
             map["email"] = account!!.email.toString()
             map["fullName"] = account!!.displayName.toString()
             map["role"] = String()
@@ -302,7 +296,7 @@ class Login: AppCompatActivity() {
                                 val intent = Intent(this@Login, MainActivityGoogle::class.java)
                                 startActivity(intent)
 
-                            }else {
+                            } else {
                                 if (userGoogle.userGoogle.role.equals("patient")) {
                                     finish()
                                     val intent = Intent(this@Login, MainActivityPatient::class.java)
@@ -316,10 +310,8 @@ class Login: AppCompatActivity() {
                             }
 
 
-
                         }
                     }
-
 
 
                     override fun onFailure(call: Call<LoginGoogleResponse>, t: Throwable) {
@@ -330,23 +322,22 @@ class Login: AppCompatActivity() {
                 })
             }
         } catch (e: ApiException) {
-            Log.d("Message",e.toString())
+            Log.d("Message", e.toString())
         }
     }
 
 
-
-
     private fun doLogin() {
-        if (isValide()){
+        if (isValide()) {
 
 
             map["email"] = email.editText?.text.toString()
             map["password"] = password.editText?.text.toString()
             CoroutineScope(Dispatchers.IO).launch {
                 apiInterface.login(map).enqueue(object : Callback<LoginResponse> {
-                    override fun onResponse(call: Call<LoginResponse>, response:
-                    Response<LoginResponse>
+                    override fun onResponse(
+                        call: Call<LoginResponse>, response:
+                        Response<LoginResponse>
                     ) {
                         val userInfo = response.body()
                         // Log.e("success: ", userInfo.toString())
@@ -356,9 +347,9 @@ class Login: AppCompatActivity() {
                                 putString(PASSWORD, userInfo.userInfo.password)
                                 putString(EMAIL, userInfo.userInfo.email)
                                 putString(FULLNAME, userInfo.userInfo.fullName)
-                                putString(PASSWORD,userInfo.userInfo.password)
-                                putString(PHONE,userInfo.userInfo.phone)
-                                putString(SPECIALITY,userInfo.userInfo.speciality)
+                                putString(PASSWORD, userInfo.userInfo.password)
+                                putString(PHONE, userInfo.userInfo.phone)
+                                putString(SPECIALITY, userInfo.userInfo.speciality)
                             }.apply()
                             if (userInfo.userInfo.role.equals("doctor")) {
                                 val intent = Intent(this@Login, MainDoctor::class.java)
@@ -373,8 +364,7 @@ class Login: AppCompatActivity() {
                                 finish()
 
                             }
-                        }
-                        else {
+                        } else {
 
                             Toast.makeText(
                                 this@Login,
@@ -383,11 +373,11 @@ class Login: AppCompatActivity() {
                             ).show()
                         }
                     }
+
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                         Log.e("Login: ", t.message.toString())
-                        Toast.makeText(this@Login,"Connexion error!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Login, "Connexion error!", Toast.LENGTH_SHORT).show()
                     }
-
 
 
                 })
@@ -399,20 +389,20 @@ class Login: AppCompatActivity() {
         if ((email.editText?.text.toString()).isEmpty()) {
             email.error = "Email Can't Be Empty"
             return false
-        }else {
+        } else {
             email.error = null
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email.editText?.text.toString()).matches()) {
             email.error = "Invalid Email Address"
             return false
-        }else {
+        } else {
             email.error = null
         }
 
-        if ((password.editText?.text.toString()).isEmpty()){
+        if ((password.editText?.text.toString()).isEmpty()) {
             password.error = "Password Cannot Be Empty"
             return false
-        }else {
+        } else {
             password.error = null
         }
 

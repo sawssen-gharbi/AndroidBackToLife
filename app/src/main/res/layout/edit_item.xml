@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:background="@color/newpink"
+    android:gravity="center"
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:gravity="center"
             android:elevation="7dp"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -33,35 +36,19 @@
 
             <ImageView
                 android:id="@+id/imageViewMoodEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="103dp"
+                android:layout_width="155dp"
+                android:layout_height="115dp"
                 android:layout_weight="1"
                 tools:srcCompat="@tools:sample/avatars" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+            <com.harrywhewell.scrolldatepicker.DayScrollDatePicker
+                android:id="@+id/dayDatePickerEdit"
+                android:layout_width="match_parent"
+                android:layout_height="142dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView8"
 
-                <Button
-                    android:id="@+id/textButtonDateEdit"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="11dp"
-                    android:text="SelectDate : "
-                    android:textColor="@color/orange" />
 
-                <TextView
-                    android:id="@+id/textViewSelectedDateEdit"
-                    android:layout_width="161dp"
-                    android:layout_height="wrap_content"
-                    android:text="New Date"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/orange" />
-            </LinearLayout>
+                app:selectedColor="@color/darkpink" />
 
             <TextView
                 android:id="@+id/textViewHowareyouEdit"
@@ -127,74 +114,134 @@
 
 
             <TextView
-                android:id="@+id/textViewDepressedMoodEdit"
+                android:id="@+id/textViewDepressedMood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text=" Depressed Mood:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black" />
-
-
-            <SeekBar
-                android:id="@+id/sliderDepressedEdit"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:valueFrom="0"
-                android:valueTo="100"
-                android:layout_height="wrap_content" />
-
-
-            <TextView
-                android:id="@+id/textViewElevatedMoodEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-
-                android:text="Elevated Mood:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black" />
-
-            <SeekBar
-                android:id="@+id/sliderElevatedEdit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:valueFrom="0"
-                android:valueTo="100" />
-
-            <TextView
-                android:id="@+id/textViewIrritabilityMoodEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Irritabililty Mood:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black" />
-
-            <SeekBar
-                android:id="@+id/sliderIrritabilityEdit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-
-                android:valueFrom="0"
-                android:valueTo="100" />
-
-            <TextView
-                android:id="@+id/textViewPsychoticEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Psychotic symptoms:"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/avenir"
+                android:text="Today's depressed mood:"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/black" />
 
             <RadioGroup
-                android:id="@+id/btnsPsychoticSymptomsEdit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sliderDepressedEdit"
+                    android:layout_width="315dp"
+                    android:layout_height="wrap_content"
+                    android:stepSize="20.0"
+                    android:value="20.0"
+                    android:valueFrom="0.0"
+                    android:valueTo="100.0"
+                    app:thumbColor="@color/darkpink"
+                    app:trackColor="@color/pink"
+
+
+                    />
+
+                <TextView
+                    android:id="@+id/textViewPourDep"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="13dp"
+                    android:text="0" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textViewElevatedMood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/avenir"
+                android:text="Today's elevated mood:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sliderElevatedEdit"
+                    android:layout_width="315dp"
+                    android:layout_height="wrap_content"
+                    android:stepSize="20.0"
+                    android:value="20.0"
+                    android:valueFrom="0.0"
+                    android:valueTo="100.0"
+                    app:thumbColor="@color/darkpink"
+                    app:trackColor="@color/pink" />
+
+                <TextView
+                    android:id="@+id/textViewPourEl"
+                    android:layout_width="64dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="13dp"
+                    android:text="0" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewIrritabilityMood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/avenir"
+                android:text="Today's Irritabililty mood:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sliderIrritabilityEdit"
+                    android:layout_width="315dp"
+                    android:layout_height="wrap_content"
+                    android:stepSize="20.0"
+                    android:value="20.0"
+                    android:valueFrom="0.0"
+                    android:valueTo="100.0"
+                    app:thumbColor="@color/darkpink"
+                    app:trackColor="@color/pink" />
+
+                <TextView
+                    android:id="@+id/textViewPourIrr"
+                    android:layout_width="66dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="13dp"
+                    android:text="0" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/textViewPsychotic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c4"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/avenir"
+                android:text="Psychotic symptoms today:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black"
+
+                />
+
+            <RadioGroup
+                android:id="@+id/btnsPsychoticSymptoms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewPsychotic"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
 
@@ -203,20 +250,25 @@
                     android:id="@+id/btnPsychoticSymptomsNoEdit"
                     android:layout_width="78dp"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@color/blue"
-                    android:text="No" />
+                    android:layout_marginRight="5dp"
+                    android:backgroundTint="@color/darkpink"
+                    android:fontFamily="@font/avenir"
+                    android:text="No"
+
+                    />
 
                 <Button
-
                     android:id="@+id/PsychoticSymptomsYesEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="3dp"
-                    android:backgroundTint="@color/blue"
+                    android:backgroundTint="@color/darkpink"
+                    android:fontFamily="@font/avenir"
                     android:text="Yes" />
 
 
             </RadioGroup>
 
+
         </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.backtolife.API.UserApi
 import com.example.backtolife.ID
@@ -20,10 +21,13 @@ import com.example.backtolife.fragments.DEPRESSEDMOOD
 import com.example.backtolife.fragments.IDREPORT
 import com.example.backtolife.models.Report
 import com.google.android.material.chip.Chip
+import com.google.android.material.slider.Slider
+import com.harrywhewell.scrolldatepicker.DayScrollDatePicker
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.HashMap
+import java.text.DateFormat
+import java.util.*
 import kotlin.math.log
 
 class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<MyReportAdapter.MyViewHolder>(){
@@ -33,6 +37,7 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
     lateinit var view: View
     val apiInterface = UserApi.create()
     val map: HashMap<String, String> = HashMap()
+    private var SelectedDate : Date = Date()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_report, parent, false)
@@ -101,21 +106,31 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
 
 
         val imagee = itemView.findViewById<ImageView>(R.id.title_image_report)
-        /*val editReportImage =
-            itemView.findViewById<ImageView>(R.id.menuEditReport).setOnClickListener {
+        val card =
+            itemView.findViewById<CardView>(R.id.card).setOnClickListener {
                 popupMenus(it)
-            }*/
+            }
 
 
-        /* private fun popupMenus(v: View) {
+        private fun popupMenus(v: View) {
             val position = reports[adapterPosition]
             val popupMenus = PopupMenu(mContext, v)
             popupMenus.inflate(R.menu.edit_menu)
-            popupMenus.setOnMenuItemClickListener {
+            popupMenus.setOnMenuItemClickListener { it ->
                 if (it.itemId == R.id.editReport) {
                     val v = LayoutInflater.from(mContext).inflate(R.layout.edit_item,null)
-                    val dateEdit = v.findViewById<TextView>(R.id.textViewSelectedDateEdit)
-                    dateEdit.text = position.date
+                    val dateEdit = v.findViewById<DayScrollDatePicker>(R.id.dayDatePickerEdit)
+
+                    dateEdit.getSelectedDate {
+
+                        if (it != null) {
+                            SelectedDate = it
+                        }
+                        Toast.makeText(mContext, SelectedDate.toString(), Toast.LENGTH_SHORT).show()
+                        Log.e("date", DateFormat.getDateInstance().format(SelectedDate))
+                    }
+
+
                     //mood
                     val moodHappyEdit = v.findViewById<TextView>(R.id.textViewHappyEdit)
                     val moodCalmEdit = v.findViewById<TextView>(R.id.textViewCalmEdit)
@@ -126,6 +141,7 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
 
                     when (position.mood) {
                         "Happy" -> {
+
                             imageEdit.setImageResource(R.drawable.happyy)
                             moodHappyEdit.setTextColor(Color.parseColor("#74C5E1"))
                         }
@@ -146,13 +162,13 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
                         }
                     }
                     //d,e,i mood
-                    val depressedMoodEdit = v.findViewById<SeekBar>(R.id.sliderDepressedEdit)
-                    val elevatedMoodEdit = v.findViewById<SeekBar>(R.id.sliderElevatedEdit)
-                    val irritabilityMoodEdit = v.findViewById<SeekBar>(R.id.sliderIrritabilityEdit)
+                    val depressedMoodEdit = v.findViewById<Slider>(R.id.sliderDepressedEdit)
+                    val elevatedMoodEdit = v.findViewById<Slider>(R.id.sliderElevatedEdit)
+                    val irritabilityMoodEdit = v.findViewById<Slider>(R.id.sliderIrritabilityEdit)
 
-                    depressedMoodEdit.progress = position.depressedMood
-                    elevatedMoodEdit.progress =  position.elevatedMood
-                    irritabilityMoodEdit.progress = position.irritabilityMood
+                    depressedMoodEdit.value = position.depressedMood.toFloat()
+                    elevatedMoodEdit.value = position.elevatedMood.toFloat()
+                    irritabilityMoodEdit.value = position.irritabilityMood.toFloat()
 
                     //btns
                     val psychoticBtnNoEdit = v.findViewById<TextView>(R.id.btnPsychoticSymptomsNoEdit)
@@ -173,9 +189,11 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
                         .setView(v)
                         .setPositiveButton("Ok"){
                                 dialog,_->
-                            map["depressedMood"] = depressedMoodEdit.progress.toString()
-                            map["elevatedMood"] = elevatedMoodEdit.progress.toString()
-                            map["irritabilityMood"] = irritabilityMoodEdit.progress.toString()
+                            map["depressedMood"] = depressedMoodEdit.value.toString()
+                            map["elevatedMood"] = elevatedMoodEdit.value.toString()
+                            map["irritabilityMood"] = irritabilityMoodEdit.value.toString()
+                            map["date"] = DateFormat.getDateInstance().format(SelectedDate).toString()
+
 
                             apiInterface.editReport(id,map).enqueue(object: Callback<Report> {
                                 override fun onResponse(call: Call<Report>, response: Response<Report>)
@@ -214,7 +232,7 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
             val menu = popup.get(popupMenus)
             menu.javaClass.getDeclaredMethod("setForceShowIcon",Boolean::class.java)
                 .invoke(menu,true)
-        }*/
+        }
 
 
     }
@@ -237,7 +255,12 @@ class MyReportAdapter(var reports: MutableList<Report>)  : RecyclerView.Adapter<
             })
         notifyDataSetChanged()
     }
+
+
     }
+
+
+
 
 
 
