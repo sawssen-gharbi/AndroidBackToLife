@@ -20,7 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.backtolife.API.UserApi
-import com.example.backtolife.fragments.isValide
+import com.example.backtolife.fragments.*
 import com.example.backtolife.models.Therapy
 import com.example.backtolife.models.TherapyResponse
 import com.example.backtolife.models.User
@@ -133,7 +133,7 @@ class EditTherapy : AppCompatActivity() {
         }
     }
     private fun doUpdate() {
-        if (isValide()){
+
             val apiInterface = UserApi.create()
 
 
@@ -184,4 +184,4 @@ class EditTherapy : AppCompatActivity() {
                     override fun onFailure(call: Call<TherapyResponse>, t: Throwable) {
                         Log.e("ADD-EVENT", t.message!!, t)
                     }
-                })}}}}
+                })}}}

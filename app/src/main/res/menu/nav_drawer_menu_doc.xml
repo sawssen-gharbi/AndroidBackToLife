@@ -7,11 +7,11 @@
     <group>
         <item
             android:id="@+id/navArticle"
-            android:icon="@drawable/ic_baseline_home_24"
+            android:icon="@drawable/ic_baseline_article_24"
             android:title="Articles" />
         <item
             android:id="@+id/groupm"
-            android:icon="@drawable/ic_baseline_list_24"
+            android:icon="@drawable/ic_baseline_message_24"
             android:title="group message " />
     </group>
 
@@ -19,11 +19,11 @@
         <menu>
             <item
                 android:id="@+id/nav_aboutUs"
-                android:icon="@drawable/ic_person1"
+                android:icon="@drawable/ic_baseline_login_24"
                 android:title="About Us" />
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_person"
+                android:icon="@drawable/ic_baseline_share_24"
                 android:title="Share" />
         </menu>
     </item>

@@ -63,6 +63,7 @@
                 app:itemIconSize="30dp"
                 app:menu="@menu/nav_menu">
 
+
             </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -76,7 +77,19 @@
         android:layout_height="match_parent"
         app:headerLayout="@layout/header_navigation_drawer"
         app:menu ="@menu/nav_drawer_menu"
-        android:layout_gravity="start" />
+        android:layout_gravity="start" >
+        <Button
+            android:id="@+id/logP"
+            android:layout_marginTop="600dp"
+            android:layout_width="match_parent"
+            android:backgroundTint="@color/back"
+
+            android:layout_height="wrap_content"
+            android:text="Log Out" />
+
+
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

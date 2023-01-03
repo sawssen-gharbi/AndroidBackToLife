@@ -37,7 +37,6 @@ import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.backtolife.*
-import com.example.backtolife.fragments.isValide
 import com.example.studentchat.Interface.RealPathUtil
 import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.MediaType.Companion.get

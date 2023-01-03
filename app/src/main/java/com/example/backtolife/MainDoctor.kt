@@ -45,11 +45,13 @@ class MainDoctor : AppCompatActivity() {
         butLog.setOnClickListener {
             showAlertDialog()
         }
+        mSharedPref = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
 
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
         navViewd.setNavigationItemSelectedListener { menuItem ->
+            mSharedPref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 
 
             when (menuItem.itemId) {

@@ -16,6 +16,7 @@ import com.example.backtolife.*
 import com.example.backtolife.API.UserApi
 import com.example.backtolife.Adapter.ClassicAdapter
 import com.example.backtolife.fragments.IMAGEU
+import com.example.backtolife.fragments.STATUS
 import com.example.backtolife.models.*
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso

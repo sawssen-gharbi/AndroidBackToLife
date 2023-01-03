@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.bundleOf
+import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.ItemTouchHelper
 
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,6 +58,7 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
 
                     if (response.isSuccessful) {
                         recyclerView = rootview.findViewById(R.id.recycleViewReport)
+
                         adapter = MyReportAdapter(response.body()!! as MutableList<Report>)
 
 
@@ -102,6 +104,7 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
 
     }
 }
+
 
 
 

@@ -72,9 +72,7 @@ class listTherapy : Fragment() {
                         adapter.filter.filter(searchh)
 
                     }
-                    for(t: Therapy in response.body()!!){
-                        Log.e("Therapy response : ",t.titre)
-                    }
+
 
                     recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,
                         false)

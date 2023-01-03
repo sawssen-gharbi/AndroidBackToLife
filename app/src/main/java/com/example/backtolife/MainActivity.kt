@@ -30,28 +30,12 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        navView.setNavigationItemSelectedListener {
-                it.isChecked = true
-            when (it.itemId) {
-
-                R.id.navHome -> refresh(HomeFragment(),it.title.toString())
-                R.id.navReport -> refresh(ReportFragment(),it.title.toString())
-            }
-            true
 
         }
 
 
     }
 
-    private fun refresh(fragment: Fragment, title: String) {
-
-        val fragementManager = supportFragmentManager
-                val fragmentTransaction = fragementManager.beginTransaction()
-     fragmentTransaction.replace(R.id.framedrawer,fragment)
-        fragmentTransaction.commit()
-        setTitle(title)
-            }
 
 
-}
+

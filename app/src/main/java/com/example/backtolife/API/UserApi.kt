@@ -1,5 +1,6 @@
 package com.example.backtolife.API
 
+import com.example.backtolife.LoginFacebookResponse
 import com.example.backtolife.LoginGoogleResponse
 import com.example.backtolife.models.LoginResponse
 import com.example.backtolife.models.*
@@ -112,6 +113,8 @@ interface UserApi {
                                                             RequestBody>,
 
                             ): Call<TherapyResponse>
+    @POST("user/loginFacebook")
+    fun loginFacebook(@Body map : HashMap<String, String> ): Call<LoginFacebookResponse>
 
 
     companion object {

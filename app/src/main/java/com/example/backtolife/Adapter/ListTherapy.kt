@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.backtolife.*
 import com.example.backtolife.API.UserApi
+import com.example.backtolife.fragments.STATUS
 import com.example.backtolife.models.*
 
 import retrofit2.Call

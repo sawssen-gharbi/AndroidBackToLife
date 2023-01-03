@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -150,25 +151,32 @@ class SignUp : AppCompatActivity() {
         var rolee = "patient"
         if (isValide()) {
 
-            if(path.isNullOrEmpty()){
-                path ="empty"
-                map["fullName"] = fullname.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                map["email"] = email.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                map["password"] = password.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
+            if (path.isNullOrEmpty()) {
+                path = "empty"
+                map["fullName"] = fullname.editText?.text.toString().trim()
+                    .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                map["email"] = email.editText?.text.toString().trim()
+                    .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                map["password"] = password.editText?.text.toString().trim()
+                    .toRequestBody("multipart/form-data".toMediaTypeOrNull())
                 map["role"] = rolee.trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
                 call = apiInterface.signupPatient(map);
-            }else{
-                if (role.isChecked){
-                    val f=File(path)
-                    map["fullName"] = fullname.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                    map["email"] = email.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                    map["password"] = password.editText?.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                    map["role"] = role.text.toString().trim().toRequestBody("multipart/form-data".toMediaTypeOrNull())
+            } else {
+                if (role.isChecked) {
+                    val f = File(path)
+                    map["fullName"] = fullname.editText?.text.toString().trim()
+                        .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    map["email"] = email.editText?.text.toString().trim()
+                        .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    map["password"] = password.editText?.text.toString().trim()
+                        .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    map["role"] = role.text.toString().trim()
+                        .toRequestBody("multipart/form-data".toMediaTypeOrNull())
                     reqFile = f.asRequestBody("image/jpeg".toMediaTypeOrNull())
                     body = MultipartBody.Part.createFormData("certificate", f.name, reqFile!!)
-                    call = apiInterface.signupDoctor(map,body!!);
+                    call = apiInterface.signupDoctor(map, body!!);
                 } else {
-                    Log.e("Erreur here","erreur")
+                    Log.e("Erreur here", "erreur")
                 }
             }
 
@@ -181,14 +189,14 @@ class SignUp : AppCompatActivity() {
 
                         val user = response.body()
                         Log.e("success: ", user.toString())
-                        if (user != null  ) {
+                        if (user != null) {
                             mSharedPref.edit().apply {
                                 putString(ID, user.user._id)
                                 putString(ROLE, user.user.role)
                                 putString(PASSWORD, user.user.password)
                                 putString(EMAIL, user.user.email)
                                 putString(FULLNAME, user.user.fullName)
-                                putString(CERTIFICATE,user.user.certificate)
+                                putString(CERTIFICATE, user.user.certificate)
                             }.apply()
 
                             intent = Intent(this@SignUp, Login::class.java)
@@ -215,10 +223,37 @@ class SignUp : AppCompatActivity() {
 
 
     }
+
+
+
+    private fun isValide(): Boolean {
+
+        if ((fullname.editText?.text.toString()).isEmpty()) {
+            fullname.error = "Fullname Can't Be Empty"
+            return false
+        } else {
+            fullname.error = null
+        }
+        if ((email.editText?.text.toString()).isEmpty()) {
+            email.error = "Email Can't Be Empty"
+            return false
+        }else {
+            email.error = null
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email.editText?.text.toString()).matches()) {
+            email.error = "Invalid Email Address"
+            return false
+        }else {
+            email.error = null
+        }
+
+        if ((password.editText?.text.toString()).isEmpty()) {
+            password.error = "Password Can't Be Empty"
+            return false
+        }else {
+            password.error = null
+        }
+
+        return true
+    }
 }
-
-
-private  fun isValide(): Boolean {
-    return true
-}
-

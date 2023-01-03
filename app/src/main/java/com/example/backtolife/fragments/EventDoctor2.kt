@@ -76,9 +76,6 @@ class eventDoctor2 : Fragment() {
                         adapter.filter.filter(searchhhh)
 
                     }
-                    for(t: Therapy in response.body()!!){
-                        Log.e("Therapy response : ",t.titre)
-                    }
 
                     recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,
                         false)

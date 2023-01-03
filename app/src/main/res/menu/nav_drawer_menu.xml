@@ -4,29 +4,34 @@
 
     <group>
         <item
-            android:id="@+id/navHome"
-            android:icon="@drawable/ic_baseline_home_24"
-            android:title="Home" />
+            android:id="@+id/navTM"
+            android:icon="@drawable/ic_baseline_psychology_24"
+            android:title="Learn TM" />
         <item
-            android:id="@+id/navReport"
-            android:icon="@drawable/ic_baseline_list_24"
-            android:title="Reports " />
+            android:id="@+id/navBreath"
+            android:icon="@drawable/ic_baseline_self_improvement_24"
+            android:title="Breath Exercice" />
         <item
-            android:id="@+id/navEvent"
-            android:icon="@drawable/ic_baseline_folder_24"
-            android:title="Events" />
+            android:id="@+id/navMessage"
+            android:icon="@drawable/ic_baseline_message_24"
+            android:title="Group Message" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Log Out">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_person1"
-                android:title="Share" />
+                android:id="@+id/nav_out"
+                android:icon="@drawable/ic_baseline_login_24"
+                android:title="Log Out" />
+        </menu>
+    </item>
+    <item android:title="Communicate">
+        <menu>
+
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_launcher_foreground"
-                android:title="Send" />
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_baseline_share_24"
+                android:title="Share" />
         </menu>
     </item>
 
