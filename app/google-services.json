@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "716651744668",
+    "project_id": "savemeproject",
+    "storage_bucket": "savemeproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:716651744668:android:ce9127c9247ea3e930cc59",
+        "android_client_info": {
+          "package_name": "com.example.backtolife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "716651744668-3980bepoekivln902glqrhkcg260fuc7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUF3chfeA1bPLNtQ6vKYQK6JyBrKZ4-kI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "716651744668-3980bepoekivln902glqrhkcg260fuc7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
